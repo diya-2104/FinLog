@@ -1,0 +1,52 @@
+.budget {
+    background: #1F2937;
+    border-radius: 12px;
+    padding: 24px;
+}
+
+    .budget h2 {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+.progress-bar {
+    width: 100%;
+    background: #374151;
+    border-radius: 8px;
+    height: 8px;
+    margin-top: 4px;
+}
+
+    .progress-bar span {
+        display: block;
+        height: 8px;
+        border-radius: 8px;
+    }
+
+.budget .btn-manage {
+    margin-top: 20px;
+    width: 100%;
+    padding: 10px;
+    background: #2563EB;
+    border-radius: 8px;
+    color: white;
+    transition: background 0.3s;
+}
+
+    .budget .btn-manage:hover {
+        background: #1D4ED8;
+    }
+.budget-categories > div {
+    margin-bottom: 20px;
+}
+
+.budget-label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #d1d5db; /* light gray for balance */
+}
+
