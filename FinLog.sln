@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36429.23 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "finlog.client", "finlog.client\finlog.client.esproj", "{032256DB-1080-97D5-B92D-6F371BAF892D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinLog.Server", "FinLog.Server\FinLog.Server.csproj", "{F67DD260-FD7C-4429-B864-CF1B9C2D4C90}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{032256DB-1080-97D5-B92D-6F371BAF892D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{032256DB-1080-97D5-B92D-6F371BAF892D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{032256DB-1080-97D5-B92D-6F371BAF892D}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{032256DB-1080-97D5-B92D-6F371BAF892D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{032256DB-1080-97D5-B92D-6F371BAF892D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{032256DB-1080-97D5-B92D-6F371BAF892D}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{F67DD260-FD7C-4429-B864-CF1B9C2D4C90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F67DD260-FD7C-4429-B864-CF1B9C2D4C90}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F67DD260-FD7C-4429-B864-CF1B9C2D4C90}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F67DD260-FD7C-4429-B864-CF1B9C2D4C90}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {00391404-EA40-421B-AE8B-6E2CA42A720C}
+	EndGlobalSection
+EndGlobal
