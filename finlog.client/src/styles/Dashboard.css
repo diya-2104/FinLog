@@ -1,0 +1,28 @@
+/* Dashboard.css */
+
+.dashboard {
+    background-color: #0D1117; /* dark background */
+    color: white;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.dashboard-main {
+    flex-grow: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr; /* single column on mobile */
+    gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+    .dashboard-grid {
+        grid-template-columns: 2fr 1fr; /* two columns on medium screens */
+    }
+}

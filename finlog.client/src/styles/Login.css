@@ -1,0 +1,290 @@
+/* Overlay behind the modal */
+.login-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(10, 10, 10, 0.75);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* Modal box */
+.login-modal {
+    background: #1f2937; /* dark gray */
+    padding: 30px 40px;
+    max-height: 350px;
+    border-radius: 16px;
+    width: 400px;
+    max-width: 90%;
+    color: white;
+    position: relative;
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow-y: auto; /* Changed from hidden to auto for scrolling */
+}
+
+    /* Scrollbar styling for WebKit browsers */
+    .login-modal::-webkit-scrollbar {
+        width: 4px; /* Small scrollbar width */
+    }
+
+    .login-modal::-webkit-scrollbar-thumb {
+        background-color: #4f46e5; /* Color of the scrollbar thumb */
+        border-radius: 3px;
+    }
+
+    .login-modal::-webkit-scrollbar-track {
+        background: #1f2937; /* Color of the scrollbar track */
+        border-radius: 3px;
+    }
+
+/* Close button */
+.close-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: transparent;
+    border: none;
+    font-size: 28px;
+    color: #9ca3af;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+    .close-btn:hover {
+        color: white;
+    }
+
+/* Icon circle */
+.login-icon {
+    background: #4f46e5; /* indigo */
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    margin: 0 auto 20px auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+    .login-icon i {
+        color: white;
+        font-size: 28px;
+    }
+
+/* Headings */
+.login-modal h2 {
+    text-align: center;
+    font-size: 28px;
+    margin-bottom: 6px;
+    font-weight: 700;
+}
+
+.login-modal p {
+    text-align: center;
+    color: #9ca3af;
+    margin-bottom: 24px;
+}
+
+/* Form labels */
+.login-modal label {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 6px;
+    color: #d1d5db;
+    font-weight: 600;
+}
+
+/* Input wrapper for icon + input */
+.input-wrapper {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+    .input-wrapper .icon {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        color: #6b7280;
+        pointer-events: none;
+        font-size: 16px;
+    }
+
+/* Input highlight */
+.input-highlight {
+    width: 90%; /* Decreased input width */
+    padding: 12px 12px 12px 38px;
+    border-radius: 8px;
+    border: 1px solid #374151;
+    background: #111827;
+    color: white;
+    font-size: 16px;
+    outline: none;
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+    .input-highlight::placeholder {
+        color: #6b7280;
+    }
+
+    .input-highlight:focus {
+        border-color: #4f46e5;
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.4);
+    }
+
+/* Eye icon */
+.eye-icon {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    cursor: pointer;
+    color: #6b7280;
+    font-size: 16px;
+}
+
+    .eye-icon:hover {
+        color: #d1d5db;
+    }
+
+/* Flex row for checkbox + forgot password */
+.flex-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    font-size: 14px;
+}
+
+/* Checkbox label */
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    color: #d1d5db;
+    cursor: pointer;
+}
+
+    .checkbox-label input {
+        margin-right: 8px;
+        accent-color: #4f46e5;
+    }
+
+/* Forgot password link */
+.forgot-password {
+    color: #6366f1;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+    .forgot-password:hover {
+        color: #818cf8;
+    }
+
+/* Sign In button */
+.btn-signin {
+    width: 100%;
+    background-color: #4f46e5;
+    color: white;
+    font-weight: 600;
+    font-size: 18px;
+    padding: 14px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+    .btn-signin:hover {
+        background-color: #4338ca;
+        transform: scale(1.05);
+    }
+
+/* Signup text */
+.signup-text {
+    text-align: center;
+    margin-top: 18px;
+    color: #9ca3af;
+    font-size: 14px;
+}
+
+    .signup-text a {
+        color: #6366f1;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+        .signup-text a:hover {
+            color: #818cf8;
+        }
+
+/* Divider */
+.divider {
+    text-align: center;
+    margin: 28px 0 16px;
+    font-size: 12px;
+    color: #6b7280;
+    position: relative;
+}
+
+    .divider::before,
+    .divider::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        width: 40%;
+        height: 1px;
+        background: #374151;
+    }
+
+    .divider::before {
+        left: 0;
+    }
+
+    .divider::after {
+        right: 0;
+    }
+
+/* Social buttons container */
+.social-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+}
+
+/* Social buttons */
+/* Social buttons */
+.social-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #111827;
+    color: #9ca3af;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    /* New styles to center the icon */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}    
+
+.social-btn:hover {
+        color: white;
+    }
+
+    /* Social colors */
+    .social-btn.google:hover {
+        background: #db4437;
+    }
+
+    .social-btn.facebook:hover {
+        background: #1877f2;
+    }
+
+    .social-btn.twitter:hover {
+        background: #1da1f2;
+    }

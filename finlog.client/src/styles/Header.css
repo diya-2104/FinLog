@@ -1,0 +1,59 @@
+.header {
+    background: #0D1117;
+    border-bottom: 1px solid #374151;
+    padding: 6px 16px 2px 16px; /* top right bottom left */
+    /* reduced bottom padding only */
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+
+    .header .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .header .logo {
+        display: flex;
+        align-items: center;
+        font-weight: bold;
+        font-size: 16px; /* kept at 16px to not affect the text */
+        color: white;
+    }
+
+        .header .logo i {
+            margin-right: 8px; /* slightly smaller spacing */
+            color: #60A5FA;
+            font-size: 32px; /* Increased to make only the icon larger */
+        }
+
+    .header .auth-buttons button {
+        margin-left: 12px;
+        padding: 12px 24px; /* bigger padding */
+        font-size: 18px; /* bigger font */
+        border-radius: 8px; /* rounder corners */
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .header .btn-outline {
+        background: transparent;
+        border: 1px solid #60A5FA;
+        color: #60A5FA;
+    }
+
+        .header .btn-outline:hover {
+            background: #60A5FA;
+            color: white;
+        }
+
+    .header .btn-primary {
+        background: #2563EB;
+        color: white;
+        border: none;
+    }
+
+        .header .btn-primary:hover {
+            background: #1D4ED8;
+        }
