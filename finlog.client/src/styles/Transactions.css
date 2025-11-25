@@ -57,12 +57,13 @@
     background: #374151;
     border-radius: 8px;
     transition: background 0.3s;
-    color:white;
+    color: white;
 }
 
     .view-all:hover {
         background: #4B5563;
     }
+
 .transactions-header {
     display: flex;
     justify-content: space-between;

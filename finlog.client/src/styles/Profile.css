@@ -1,0 +1,238 @@
+/* ===== Page Background ===== */
+.profile-page {
+    font-family: "Poppins", sans-serif;
+    background-color: #000;
+    color: #fff;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 16px;
+    box-sizing: border-box;
+    overflow-x: auto;
+    overflow-y: auto;
+    font-size: 16px;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+/* ===== Container ===== */
+.profile-page .inner-container {
+    min-width: 1200px;
+    box-sizing: border-box;
+}
+
+/* Header */
+.profile-page .header {
+    background-color: #111;
+    padding: 20px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.6);
+}
+
+.profile-page .logo {
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    font-size: 18px;
+    color: #fff;
+}
+
+    .profile-page .logo i {
+        margin-right: 8px;
+        color: #60A5FA;
+        font-size: 24px;
+    }
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.icon-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+}
+
+/* ===== Profile Card ===== */
+.profile-card {
+    background-color: #0d1117;
+    border-radius: 16px;
+    padding: 40px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    border: 1px solid #1f2937;
+    margin-top:30px;
+}
+
+/* ===== Header Section ===== */
+.profile-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 25px;
+    margin-bottom: 40px;
+}
+
+.profile-image-container {
+    position: relative;
+}
+
+.profile-image {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #222;
+}
+
+.letter-avatar {
+    width: 120px;
+    height: 120px;
+    background: #4a90e2;
+    color: white;
+    font-size: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    border: 3px solid #222;
+}
+
+.edit-icon {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background-color: #6366f1;
+    border-radius: 50%;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.profile-info h1 {
+    font-size: 30px;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.profile-info .role {
+    color: #b3b3b3;
+    font-size: 15px;
+    margin-bottom: 6px;
+}
+
+.profile-info .location {
+    color: #b3b3b3;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* ===== Info Boxes ===== */
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 25px;
+    margin-bottom: 30px;
+}
+
+.info-box {
+    background-color: #161b22;
+    border: 1px solid #2a2f3a;
+    border-radius: 10px;
+    padding: 25px;
+    transition: all 0.3s ease;
+}
+
+    .info-box:hover {
+        border-color: #3b82f6;
+        box-shadow: 0 0 10px rgba(59, 130, 246, 0.2);
+    }
+
+    .info-box h2 {
+        font-size: 18px;
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #fff;
+        font-weight: 600;
+    }
+
+.info-item {
+    margin-bottom: 14px;
+}
+
+.label {
+    color: #9ca3af;
+    font-size: 13px;
+    margin-bottom: 4px;
+}
+
+.info-item p {
+    font-size: 15px;
+    font-weight: 500;
+    color: #fff;
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 30px;
+}
+
+.logout-btn {
+    background-color: #ef4444;
+    color: #fff;
+    border: none;
+    padding: 12px 26px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s ease;
+    margin-bottom: 40px;
+}
+
+    .logout-btn:hover {
+        background-color: #dc2626;
+    }
+
+@media (max-width: 768px) {
+    .profile-card {
+        padding: 25px;
+    }
+
+    .profile-header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .profile-info h1 {
+        font-size: 24px;
+    }
+
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+}
+.category-page .footer {
+    background-color: #111;
+    border-top: 1px solid #333;
+    padding: 20px;
+    text-align: center;
+    color: #aaa;
+    font-size: 15px;
+}
+

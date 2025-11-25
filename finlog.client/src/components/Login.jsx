@@ -49,6 +49,8 @@ const Login = ({ isOpen, onClose }) => {
 
             // Store user info
             localStorage.setItem("user", JSON.stringify(response.data.user));
+            localStorage.setItem("userId", response.data.user.uid);
+            console.log("Saved userId:", response.data.user.uid);
 
             // Print welcome message with username in console
             if (response.data.user && response.data.user.fname) {
