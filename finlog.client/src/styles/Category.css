@@ -118,11 +118,42 @@
 .category-page .main-content {
     padding: 8px 0 32px;
 }
+
+/* Main Content Header */
+.category-page .main-content-header {
+    display: flex;
+    justify-content: space-between; /* title left, button right */
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+    .category-page .main-content-header h2 {
+        font-size: 22px;
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .category-page .main-content-header .add-category-btn {
+        padding: 8px 16px;
+        background-color: #3b82f6;
+        border: none;
+        border-radius: 8px;
+        color: #fff;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+        .category-page .main-content-header .add-category-btn:hover {
+            background-color: #2563eb;
+        }
+
+
 .category-row {
     display: flex;
     justify-content: center; /* <-- This centers the cards */
-    gap: 200px;
-    margin-bottom: 24px;
+    gap: 30px;
+    margin-bottom: 25px;
     flex-wrap: wrap; /* Optional: wrap cards on smaller screens */
 }
 
@@ -213,3 +244,13 @@
             .category-card .action-icons i:hover {
                 color: #fff;
             }
+
+.category-page .footer {
+    background-color: #111;
+    border-top: 1px solid #333;
+    padding: 20px;
+    text-align: center;
+    color: #aaa;
+    font-size: 15px;
+}
+

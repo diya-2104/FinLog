@@ -1,81 +1,97 @@
 import React, { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink,useNavigate } from "react-router-dom";
+import api from "../api/api"; // backend API connection
 import "../styles/Category.css";
+
+const pastelColors = ["#FFD1DC", "#AEC6CF", "#77DD77", "#FFF5BA", "#CBAACB"];
+const getRandomPastel = () => pastelColors[Math.floor(Math.random() * pastelColors.length)];
 
 const Category = () => {
     const [avatarLetter, setAvatarLetter] = useState("");
+    const navigate = useNavigate();
     const [showModal, setShowModal] = useState(false);
     const [categoryName, setCategoryName] = useState("");
-    const [categories, setCategories] = useState([
-        {
-            id: 1,
-            name: "Shopping",
-            amount: "$1,234",
-            transactions: 12,
-            icon: "???",
-            color: "#bfdbfe"
-        },
-        {
-            id: 2,
-            name: "Housing",
-            amount: "$2,500",
-            transactions: 5,
-            icon: "??",
-            color: "#bbf7d0"
-        },
-        {
-            id: 3,
-            name: "Food & Dining",
-            amount: "$650",
-            transactions: 18,
-            icon: "??",
-            color: "#fde68a"
-        },
-        {
-            id: 4,
-            name: "Transportation",
-            amount: "$320",
-            transactions: 7,
-            icon: "??",
-            color: "#e9d5ff"
+    const [categoryColor, setCategoryColor] = useState(getRandomPastel());
+    const [categories, setCategories] = useState([]);
+    const [userId, setUserId] = useState(null);
+
+    // Fetch categories from backend
+    const fetchCategories = async (uid) => {
+        try {
+            const response = await api.get(`/api/category?uid=${uid}`);
+            setCategories(response.data);
+        } catch (error) {
+            console.error("Error fetching categories:", error.response?.data || error.message);
         }
-    ]);
+    };
 
     useEffect(() => {
-        const container = document.querySelector(".category-page");
-        if (container) container.scrollLeft = 0;
-
         const userData = localStorage.getItem("user");
         if (userData) {
             const user = JSON.parse(userData);
+
+            console.log("User object from localStorage:", user);
+            console.log("User ID:", user.uid);
+
+            setUserId(user.uid);
+
             if (user.fname && user.fname.length > 0) {
                 setAvatarLetter(user.fname[0].toUpperCase());
             } else if (user.email && user.email.length > 0) {
                 setAvatarLetter(user.email[0].toUpperCase());
             }
+
+            if (user.uid) fetchCategories(user.uid);
         }
     }, []);
 
-    const handleSaveCategory = () => {
-        if (categoryName.trim() === "") return;
+    // Add new category
+    const handleSaveCategory = async () => {
+        if (!categoryName.trim() || !userId) return;
 
         const newCategory = {
-            id: Date.now(),
-            name: categoryName,
-            amount: "$0",
-            transactions: 0,
-            icon: "??",
-            color: "#d1d5db"
+            cname: categoryName,
+            uid: userId,
+            color: categoryColor,
+            incomes: [],
+            expenses:[]
         };
 
-        setCategories([...categories, newCategory]);
-        setShowModal(false);
-        setCategoryName("");
+        try {
+            console.log("Sending new category:", newCategory);
+            const response = await api.post("/api/category", newCategory);
+            setCategories([...categories, response.data]);
+            setShowModal(false);
+            setCategoryName("");
+            setCategoryColor(getRandomPastel());
+        } catch (error) {
+            console.error("Error adding category:", error.response?.data || error.message);
+        }
     };
 
+    // Delete category
+    const handleDeleteCategory = async (cid) => {
+        if (!window.confirm("Are you sure you want to delete this category?")) return;
+
+        try {
+            const response = await api.delete(`/api/category/${cid}`);
+
+            if (response.status === 200) {
+                setCategories(categories.filter(cat => cat.cid !== cid));
+                alert("Category deleted successfully!");
+            } else {
+                console.error("Failed to delete category:", response);
+            }
+        } catch (error) {
+            console.error("Error deleting category:", error.response?.data || error.message);
+        }
+    };
+
+    // Cancel modal
     const handleCancel = () => {
         setShowModal(false);
         setCategoryName("");
+        setCategoryColor(getRandomPastel());
     };
 
     return (
@@ -103,87 +119,78 @@ const Category = () => {
                                 <path d="M18 16v-5c0-3.31-2.69-6-6-6s-6 2.69-6 6v5l-2 2v1h16v-1l-2-2z"></path>
                             </svg>
                         </button>
-                        <div className="avatar">{avatarLetter}</div>
+                        <div
+                            className="avatar"
+                            title="View Profile"
+                            onClick={() => navigate("/profile")}
+                            style={{ cursor: "pointer" }}
+                        >
+                            {avatarLetter}
+                        </div>
                     </div>
                 </header>
 
                 {/* Tabs */}
                 <nav className="tabs">
-                    <NavLink to="/income" className={({ isActive }) => isActive ? "tab active-tab" : "tab"}>
-                        Income
-                    </NavLink>
-                    <NavLink to="/expense" className={({ isActive }) => isActive ? "tab active-tab" : "tab"}>
-                        Expense
-                    </NavLink>
-                    <NavLink to="/category" className={({ isActive }) => isActive ? "tab active-tab" : "tab"}>
-                        Category
-                    </NavLink>
-                    <NavLink to="#" className="tab">Transactions</NavLink>
-                    <NavLink to="#" className="tab">Reports</NavLink>
+                    <NavLink to="/income" className={({ isActive }) => isActive ? "tab active-tab" : "tab"}>Income</NavLink>
+                    <NavLink to="/expense" className={({ isActive }) => isActive ? "tab active-tab" : "tab"}>Expense</NavLink>
+                    <NavLink to="/category" className={({ isActive }) => isActive ? "tab active-tab" : "tab"}>Category</NavLink>
+                    <NavLink to="/transaction" className={({ isActive }) => isActive ? "tab active-tab" : "tab"}>Transaction</NavLink>
+                    <NavLink to="/report" className={({ isActive }) => (isActive ? "tab active-tab" : "tab")}>Reports</NavLink>
                 </nav>
 
                 {/* Main Content */}
                 <section className="category-content">
-                    <div className="category-header">
-                        <h2>Manage Categories</h2>
-                        <button className="add-btn" onClick={() => setShowModal(true)}>
-                            + Add Category
-                        </button>
-                    </div>
-
                     <div className="main-content">
-                        {/* First Row: ID 1 & 2 */}
-                        <div className="category-row">
-                            {categories.filter(cat => cat.id === 1 || cat.id === 2).map(cat => (
-                                <div key={cat.id} className="category-card">
-                                    <div className="card-header">
-                                        <div className="icon" style={{ backgroundColor: cat.color }}>{cat.icon}</div>
-                                        <div className="category-name">{cat.name}</div>
-                                    </div>
-                                    <div className="amount">{cat.amount}</div>
-                                    <div className="transactions">{cat.transactions} transactions</div>
-                                    <div className="actions">
-                                        <a href="#" className="view-details">View Details</a>
-                                        <div className="action-icons">
-                                            <i className="fas fa-pencil-alt"></i>
-                                            <i className="fas fa-trash-alt"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
+                        <div className="main-content-header">
+                            <h2>Manage Categories</h2>
+                            <button className="add-category-btn" onClick={() => setShowModal(true)}>
+                                + Add Category
+                            </button>
                         </div>
 
-                        {/* Second Row: ID 3 & 4 */}
+                        {/* Category list */}
                         <div className="category-row">
-                            {categories.filter(cat => cat.id === 3 || cat.id === 4).map(cat => (
-                                <div key={cat.id} className="category-card">
-                                    <div className="card-header">
-                                        <div className="icon" style={{ backgroundColor: cat.color }}>{cat.icon}</div>
-                                        <div className="category-name">{cat.name}</div>
-                                    </div>
-                                    <div className="amount">{cat.amount}</div>
-                                    <div className="transactions">{cat.transactions} transactions</div>
-                                    <div className="actions">
-                                        <a href="#" className="view-details">View Details</a>
-                                        <div className="action-icons">
+                            {categories.length > 0 ? (
+                                categories.map((cat) => (
+                                    <div key={cat.cid} className="category-card">
+                                        <div className="card-header" style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                                            <div
+                                                style={{
+                                                    width: "20px",
+                                                    height: "20px",
+                                                    backgroundColor: cat.color,
+                                                    borderRadius: "4px",
+                                                }}
+                                            ></div>
+                                            <div className="category-name">{cat.cname}</div>
+                                        </div>
+                                        <div className="actions">
                                             <i className="fas fa-pencil-alt"></i>
-                                            <i className="fas fa-trash-alt"></i>
+                                            <i
+                                                className="fas fa-trash-alt"
+                                                style={{ cursor: "pointer" }}
+                                                onClick={() => handleDeleteCategory(cat.cid)}
+                                            ></i>
                                         </div>
                                     </div>
-                                </div>
-                            ))}
+                                ))
+                            ) : (
+                                <p>No categories added yet.</p>
+                            )}
                         </div>
                     </div>
                 </section>
 
-                {/* Modal */}
+               
+
+                {/* Add Category Modal */}
                 {showModal && (
                     <div className="modal-overlay">
                         <div className="modal">
                             <h3>Add New Category</h3>
                             <input
                                 type="text"
-                                name="categoryName"
                                 placeholder="Enter category name"
                                 value={categoryName}
                                 onChange={(e) => setCategoryName(e.target.value)}
@@ -195,6 +202,10 @@ const Category = () => {
                         </div>
                     </div>
                 )}
+
+                <footer className="footer">
+                    © 2025 FinanceTracker. All rights reserved.
+                </footer>
             </div>
         </div>
     );
