@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../api/api';
 
 export default function RequireAdmin({ children }) {
     const [isAdmin, setIsAdmin] = useState(null);
 
     useEffect(() => {
-        axios.get('/api/admin/auth/check', { withCredentials: true })
+        api.get('/api/admin/auth/check')
             .then(res => setIsAdmin(res.data.isAdmin))
             .catch(() => setIsAdmin(false));
     }, []);

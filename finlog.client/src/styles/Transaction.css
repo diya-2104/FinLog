@@ -1,25 +1,34 @@
 /* Main Page */
 .transaction-page {
     font-family: Arial, sans-serif;
-    background-color: #000;
-    color: #fff;
-    width: 100vw;
-    height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #333;
+    width: 100%;
+    min-height: 100vh;
     margin: 0;
-    padding: 16px;
+    padding: 10px;
     box-sizing: border-box;
     overflow-x: auto;
     overflow-y: auto;
     font-size: 16px;
-    position: fixed;
-    top: 0;
-    left: 0;
 }
 
     .transaction-page .inner-container {
-        min-width: 1200px;
+        width: 100%;
+        max-width: 100%;
         box-sizing: border-box;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        min-height: calc(100vh - 20px);
+        color: #333;
     }
+
+@media (max-width: 768px) {
+    .transaction-page {
+        padding: 5px;
+    }
+}
 
     /* Header */
     .transaction-page .header {

@@ -2,7 +2,6 @@
 using FinLog.Server.Data;
 using FinLog.Server.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace FinLog.Server.Controllers.Admin

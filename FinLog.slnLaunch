@@ -1,0 +1,11 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "FinLog.Server\\FinLog.Server.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

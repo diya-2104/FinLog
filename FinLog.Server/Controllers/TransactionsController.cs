@@ -96,23 +96,42 @@ namespace FinLog.Server.Controllers
         public async Task<IActionResult> GetUserTransactions(int uid)
         {
             var transactions = await _context.Transactions
-                .Include(t => t.Category)
                 .Where(t => t.uid == uid)
                 .OrderByDescending(t => t.created_at)
-                .Select(t => new TransactionDto
+                .ToListAsync();
+
+            var result = new List<TransactionDto>();
+            foreach (var t in transactions)
+            {
+                string? refName = null;
+                if (t.ttype == "income")
+                {
+                    var account = await _context.Accounts.FindAsync(t.ref_id);
+                    refName = account?.account_name;
+                }
+                else if (t.ttype == "expense")
+                {
+                    var category = await _context.Categories.FindAsync(t.ref_id);
+                    refName = category?.cname;
+                }
+
+                var transactionAccount = await _context.Accounts.FindAsync(t.account_id);
+                result.Add(new TransactionDto
                 {
                     tid = t.tid,
                     uid = t.uid,
-                    cid = t.cid,
-                    cname = t.Category != null ? t.Category.cname : null,
+                    ref_id = t.ref_id,
+                    ref_name = refName,
+                    account_id = t.account_id,
+                    account_name = transactionAccount?.account_name,
                     ttype = t.ttype,
                     description = t.description,
                     tamount = t.tamount,
                     created_at = t.created_at
-                })
-                .ToListAsync();
+                });
+            }
 
-            return Ok(transactions);
+            return Ok(result);
         }
 
         // ============================
@@ -122,37 +141,54 @@ namespace FinLog.Server.Controllers
         public async Task<IActionResult> SearchTransactions(int uid, [FromQuery] string? q)
         {
             var query = _context.Transactions
-                                .Include(t => t.Category)
                                 .Where(t => t.uid == uid);
-
-            if (!string.IsNullOrWhiteSpace(q))
-            {
-                q = q.ToLower();
-                query = query.Where(t =>
-                    (t.Category != null && t.Category.cname.ToLower().Contains(q)) ||
-                    t.ttype.ToLower().Contains(q) ||
-                    (t.description != null && t.description.ToLower().Contains(q)) ||
-                    t.tamount.ToString().Contains(q) ||
-                    t.created_at.ToString("yyyy-MM-dd").Contains(q)
-                );
-            }
 
             var transactions = await query
                 .OrderByDescending(t => t.created_at)
-                .Select(t => new TransactionDto
+                .ToListAsync();
+
+            var result = new List<TransactionDto>();
+            foreach (var t in transactions)
+            {
+                string? refName = null;
+                if (t.ttype == "income")
+                {
+                    var account = await _context.Accounts.FindAsync(t.ref_id);
+                    refName = account?.account_name;
+                }
+                else if (t.ttype == "expense")
+                {
+                    var category = await _context.Categories.FindAsync(t.ref_id);
+                    refName = category?.cname;
+                }
+
+                var searchAccount = await _context.Accounts.FindAsync(t.account_id);
+                var dto = new TransactionDto
                 {
                     tid = t.tid,
                     uid = t.uid,
-                    cid = t.cid,
-                    cname = t.Category != null ? t.Category.cname : null,
+                    ref_id = t.ref_id,
+                    ref_name = refName,
+                    account_id = t.account_id,
+                    account_name = searchAccount?.account_name,
                     ttype = t.ttype,
                     description = t.description,
                     tamount = t.tamount,
                     created_at = t.created_at
-                })
-                .ToListAsync();
+                };
 
-            return Ok(transactions);
+                if (string.IsNullOrWhiteSpace(q) || 
+                    (refName != null && refName.ToLower().Contains(q.ToLower())) ||
+                    t.ttype.ToLower().Contains(q.ToLower()) ||
+                    (t.description != null && t.description.ToLower().Contains(q.ToLower())) ||
+                    t.tamount.ToString().Contains(q) ||
+                    t.created_at.ToString("yyyy-MM-dd").Contains(q))
+                {
+                    result.Add(dto);
+                }
+            }
+
+            return Ok(result);
         }
 
         // ============================
@@ -162,18 +198,32 @@ namespace FinLog.Server.Controllers
         public async Task<IActionResult> GetTransactionById(int tid)
         {
             var t = await _context.Transactions
-                .Include(t => t.Category)
                 .FirstOrDefaultAsync(t => t.tid == tid);
 
             if (t == null)
                 return NotFound(new { message = "Transaction not found" });
 
+            string? refName = null;
+            if (t.ttype == "income")
+            {
+                var account = await _context.Accounts.FindAsync(t.ref_id);
+                refName = account?.account_name;
+            }
+            else if (t.ttype == "expense")
+            {
+                var category = await _context.Categories.FindAsync(t.ref_id);
+                refName = category?.cname;
+            }
+
+            var relatedAccount = await _context.Accounts.FindAsync(t.account_id);
             var dto = new TransactionDto
             {
                 tid = t.tid,
                 uid = t.uid,
-                cid = t.cid,
-                cname = t.Category != null ? t.Category.cname : null,
+                ref_id = t.ref_id,
+                ref_name = refName,
+                account_id = t.account_id,
+                account_name = relatedAccount?.account_name,
                 ttype = t.ttype,
                 description = t.description,
                 tamount = t.tamount,

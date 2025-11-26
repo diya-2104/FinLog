@@ -187,14 +187,15 @@ namespace FinLog.Server.Controllers
         // ============================
         // Helper: Log transaction
         // ============================
-        private async Task LogTransaction(int uid, int cid, decimal amount, string ttype, string? description = null, DateTime? createdAt = null)
+        private async Task LogTransaction(int uid, int account_id, int ref_id, decimal amount, string ttype, string? description = null, DateTime? createdAt = null)
         {
             var transaction = new Transactions
             {
                 uid = uid,
-                cid = cid,
+                account_id = account_id,
+                ref_id = ref_id,
                 tamount = amount,
-                ttype =  "income",
+                ttype = ttype,
                 description = description,
                 created_at = createdAt ?? DateTime.UtcNow
             };
@@ -210,7 +211,7 @@ namespace FinLog.Server.Controllers
         public async Task<IActionResult> GetUserIncomes(int uid)
         {
             var incomes = await _context.Incomes
-                .Include(i => i.Category)
+                .Include(i => i.Account)
                 .Where(i => i.uid == uid)
                 .OrderByDescending(i => i.date)
                 .Select(i => new IncomeDto
@@ -218,9 +219,9 @@ namespace FinLog.Server.Controllers
                     iid = i.iid,
                     date = i.date,
                     amount = i.amount,
-                    Budget = i.Budget,
-                    cid = i.cid,
-                    cname = i.Category != null ? i.Category.cname : null
+                    description = i.description,
+                    account_id = i.account_id,
+                    account_name = i.Account != null ? i.Account.account_name : null
                 })
                 .ToListAsync();
 
@@ -241,20 +242,29 @@ namespace FinLog.Server.Controllers
                 if (income.date.Kind == DateTimeKind.Unspecified)
                     income.date = DateTime.SpecifyKind(income.date, DateTimeKind.Utc);
 
+                // Add income
                 _context.Incomes.Add(income);
                 await _context.SaveChangesAsync();
 
-                // Log transaction automatically
-                await LogTransaction(income.uid, income.cid, income.amount, "income", income.Budget.ToString(), income.date);
+                // Update account balance
+                var account = await _context.Accounts.FindAsync(income.account_id);
+                if (account != null)
+                {
+                    account.balance += income.amount;
+                    await _context.SaveChangesAsync();
+                }
+
+                // Log transaction
+                await LogTransaction(income.uid, income.account_id, income.iid, income.amount, "income", income.description, income.date);
 
                 var dto = new IncomeDto
                 {
                     iid = income.iid,
                     date = income.date,
                     amount = income.amount,
-                    Budget = income.Budget,
-                    cid = income.cid,
-                    cname = (await _context.Categories.FindAsync(income.cid))?.cname
+                    description = income.description,
+                    account_id = income.account_id,
+                    account_name = account?.account_name
                 };
 
                 return Ok(dto);
@@ -287,24 +297,21 @@ namespace FinLog.Server.Controllers
                 // Update fields
                 existingIncome.date = updatedIncome.date;
                 existingIncome.amount = updatedIncome.amount;
-                existingIncome.Budget = updatedIncome.Budget;
-                existingIncome.cid = updatedIncome.cid;
+                existingIncome.description = updatedIncome.description;
+                existingIncome.account_id = updatedIncome.account_id;
                 existingIncome.uid = updatedIncome.uid;
 
                 _context.Incomes.Update(existingIncome);
                 await _context.SaveChangesAsync();
-
-                // Optional: log updated transaction
-                await LogTransaction(existingIncome.uid, existingIncome.cid, existingIncome.amount, "income", existingIncome.Budget.ToString(), existingIncome.date);
 
                 var dto = new IncomeDto
                 {
                     iid = existingIncome.iid,
                     date = existingIncome.date,
                     amount = existingIncome.amount,
-                    Budget = existingIncome.Budget,
-                    cid = existingIncome.cid,
-                    cname = (await _context.Categories.FindAsync(existingIncome.cid))?.cname
+                    description = existingIncome.description,
+                    account_id = existingIncome.account_id,
+                    account_name = (await _context.Accounts.FindAsync(existingIncome.account_id))?.account_name
                 };
 
                 return Ok(dto);
@@ -331,11 +338,18 @@ namespace FinLog.Server.Controllers
                 if (income == null)
                     return NotFound(new { message = "Income not found" });
 
+                // Update account balance
+                var account = await _context.Accounts.FindAsync(income.account_id);
+                if (account != null)
+                {
+                    account.balance -= income.amount;
+                }
+
                 _context.Incomes.Remove(income);
                 await _context.SaveChangesAsync();
 
-                // Optional: log negative transaction
-                await LogTransaction(income.uid, income.cid, -income.amount, "income", "Deleted income", income.date);
+                // Log negative transaction
+                await LogTransaction(income.uid, income.account_id, income.iid, -income.amount, "income", "Deleted income", income.date);
 
                 return Ok(new { message = "Income deleted successfully", iid });
             }
@@ -350,16 +364,16 @@ namespace FinLog.Server.Controllers
         }
 
         // ============================
-        // GET: api/income/categories/user/17
+        // GET: api/income/accounts/user/17
         // ============================
-        [HttpGet("categories/user/{uid}")]
-        public async Task<IActionResult> GetCategories(int uid)
+        [HttpGet("accounts/user/{uid}")]
+        public async Task<IActionResult> GetAccounts(int uid)
         {
-            var categories = await _context.Categories
-                .Where(c => c.uid == uid)
+            var accounts = await _context.Accounts
+                .Where(a => a.uid == uid)
                 .ToListAsync();
 
-            return Ok(categories);
+            return Ok(accounts);
         }
     }
 }

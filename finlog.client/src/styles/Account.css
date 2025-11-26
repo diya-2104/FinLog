@@ -1,0 +1,281 @@
+.account-page {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.inner-container {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    min-height: calc(100vh - 20px);
+}
+
+.account-page .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 30px;
+    background: white;
+    border-bottom: 1px solid #eee;
+}
+
+.account-page .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+}
+
+.account-page .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.account-page .icon-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    transition: background-color 0.2s;
+}
+
+.account-page .icon-btn:hover {
+    background-color: #f5f5f5;
+}
+
+.account-page .notification-icon {
+    width: 20px;
+    height: 20px;
+    color: #666;
+}
+
+.account-page .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.account-page .tabs {
+    display: flex;
+    background: #f8f9fa;
+    border-bottom: 1px solid #eee;
+}
+
+.account-page .tab {
+    padding: 15px 25px;
+    text-decoration: none;
+    color: #666;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+}
+
+.account-page .tab:hover {
+    background: #e9ecef;
+    color: #333;
+}
+
+.account-page .active-tab {
+    color: #667eea;
+    border-bottom-color: #667eea;
+    background: white;
+}
+
+.account-content {
+    padding: 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+    .account-content {
+        padding: 15px;
+    }
+}
+
+.main-content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.main-content-header h2 {
+    color: #333;
+    margin: 0;
+}
+
+.add-account-btn {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: transform 0.2s;
+}
+
+.add-account-btn:hover {
+    transform: translateY(-2px);
+}
+
+.account-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    width: 100%;
+}
+
+@media (max-width: 768px) {
+    .account-row {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+}
+
+.account-card {
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.account-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.card-header {
+    margin-bottom: 15px;
+}
+
+.account-name {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.account-type {
+    color: #666;
+    font-size: 14px;
+}
+
+.account-balance {
+    font-size: 16px;
+    color: #28a745;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.actions {
+    display: flex;
+    gap: 15px;
+}
+
+.actions i {
+    color: #666;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.actions i:hover {
+    background: #f5f5f5;
+    color: #333;
+}
+
+.fa-trash-alt:hover {
+    color: #dc3545 !important;
+}
+
+.account-page .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.account-page .modal {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.account-page .modal h3 {
+    margin: 0 0 20px 0;
+    color: #333;
+}
+
+.account-page .modal input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.account-page .modal-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.account-page .modal-actions button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.account-page .modal-actions button:first-child {
+    background: #667eea;
+    color: white;
+}
+
+.account-page .cancel-btn {
+    background: #6c757d;
+    color: white;
+}
+
+.account-page .footer {
+    text-align: center;
+    padding: 20px;
+    background: #f8f9fa;
+    color: #666;
+    border-top: 1px solid #eee;
+}

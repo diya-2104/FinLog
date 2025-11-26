@@ -78,7 +78,7 @@
 //    );
 //}
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '../../api/api';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
 import '../styles/admin.css';
@@ -92,7 +92,7 @@ export default function Dashboard() {
     useEffect(() => {
         console.log('Making API call to /api/admin/stats');
 
-        axios.get('/api/admin/stats', { withCredentials: true })
+        api.get('/api/admin/stats')
             .then(res => {
                 const d = res.data;
 

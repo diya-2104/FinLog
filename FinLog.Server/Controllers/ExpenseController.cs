@@ -201,14 +201,15 @@ namespace FinLog.Server.Controllers
         // ============================
         // Helper: Log transaction
         // ============================
-        private async Task LogTransaction(int uid, int cid, decimal amount, string ttype, string? description = null, DateTime? createdAt = null)
+        private async Task LogTransaction(int uid, int account_id, int ref_id, decimal amount, string ttype, string? description = null, DateTime? createdAt = null)
         {
             var transaction = new Transactions
             {
                 uid = uid,
-                cid = cid,
+                account_id = account_id,
+                ref_id = ref_id,
                 tamount = amount,
-                ttype = "expense",
+                ttype = ttype,
                 description = description,
                 created_at = createdAt ?? DateTime.UtcNow
             };
@@ -225,6 +226,7 @@ namespace FinLog.Server.Controllers
         {
             var expenses = await _context.Expenses
                 .Include(e => e.Category)
+                .Include(e => e.Account)
                 .Where(e => e.uid == uid)
                 .OrderByDescending(e => e.edate)
                 .Select(e => new ExpenseDto
@@ -234,6 +236,9 @@ namespace FinLog.Server.Controllers
                     eamount = e.eamount,
                     cid = e.cid,
                     cname = e.Category != null ? e.Category.cname : null,
+                    account_id = e.account_id,
+                    account_name = e.Account != null ? e.Account.account_name : null,
+                    description = e.description,
                     uid = e.uid
                 })
                 .ToListAsync();
@@ -264,17 +269,24 @@ namespace FinLog.Server.Controllers
 
             try
             {
-                var userExists = await _context.User.AnyAsync(u => u.uid == dto.uid);
+                var userExists = await _context.Users.AnyAsync(u => u.uid == dto.uid);
                 if (!userExists) return BadRequest("User does not exist.");
 
                 var categoryExists = await _context.Categories.AnyAsync(c => c.cid == dto.cid);
                 if (!categoryExists) return BadRequest("Category does not exist.");
 
+                // Check if account has sufficient balance
+                var account = await _context.Accounts.FindAsync(dto.account_id);
+                if (account == null) return BadRequest("Account does not exist.");
+                if (account.balance < dto.eamount) return BadRequest("Insufficient account balance.");
+
                 var expense = new Expense
                 {
                     uid = dto.uid,
                     cid = dto.cid,
+                    account_id = dto.account_id,
                     eamount = dto.eamount,
+                    description = dto.description,
                     edate = dto.edate.Kind == DateTimeKind.Unspecified
                         ? DateTime.SpecifyKind(dto.edate, DateTimeKind.Utc)
                         : dto.edate
@@ -283,17 +295,24 @@ namespace FinLog.Server.Controllers
                 _context.Expenses.Add(expense);
                 await _context.SaveChangesAsync();
 
-                // Log transaction automatically
-                await LogTransaction(expense.uid, expense.cid, expense.eamount, "expense", "New expense", expense.edate);
+                // Deduct from account balance
+                account.balance -= expense.eamount;
+                await _context.SaveChangesAsync();
+
+                // Log transaction
+                await LogTransaction(expense.uid, expense.account_id, expense.eid, expense.eamount, "expense", expense.description, expense.edate);
 
                 var resultDto = new ExpenseDto
                 {
                     eid = expense.eid,
                     uid = expense.uid,
                     cid = expense.cid,
+                    account_id = expense.account_id,
                     eamount = expense.eamount,
+                    description = expense.description,
                     edate = expense.edate,
-                    cname = (await _context.Categories.FindAsync(expense.cid))?.cname
+                    cname = (await _context.Categories.FindAsync(expense.cid))?.cname,
+                    account_name = account.account_name
                 };
 
                 return Ok(resultDto);
@@ -321,7 +340,9 @@ namespace FinLog.Server.Controllers
             if (expense == null) return NotFound("Expense not found.");
 
             expense.cid = dto.cid;
+            expense.account_id = dto.account_id;
             expense.eamount = dto.eamount;
+            expense.description = dto.description;
             expense.edate = dto.edate.Kind == DateTimeKind.Unspecified
                 ? DateTime.SpecifyKind(dto.edate, DateTimeKind.Utc)
                 : dto.edate;
@@ -330,17 +351,17 @@ namespace FinLog.Server.Controllers
             {
                 await _context.SaveChangesAsync();
 
-                // Log updated transaction
-                await LogTransaction(expense.uid, expense.cid, expense.eamount, "expense", "Updated expense", expense.edate);
-
                 var updated = new ExpenseDto
                 {
                     eid = expense.eid,
                     uid = expense.uid,
                     cid = expense.cid,
+                    account_id = expense.account_id,
                     eamount = expense.eamount,
+                    description = expense.description,
                     edate = expense.edate,
-                    cname = (await _context.Categories.FindAsync(expense.cid))?.cname
+                    cname = (await _context.Categories.FindAsync(expense.cid))?.cname,
+                    account_name = (await _context.Accounts.FindAsync(expense.account_id))?.account_name
                 };
                 return Ok(updated);
             }
@@ -364,13 +385,32 @@ namespace FinLog.Server.Controllers
             if (expense == null)
                 return NotFound("Expense not found.");
 
+            // Restore account balance
+            var account = await _context.Accounts.FindAsync(expense.account_id);
+            if (account != null)
+            {
+                account.balance += expense.eamount;
+            }
+
             _context.Expenses.Remove(expense);
             await _context.SaveChangesAsync();
 
             // Log negative transaction for deleted expense
-            await LogTransaction(expense.uid, expense.cid, -expense.eamount, "expense", "Deleted expense", expense.edate);
+            await LogTransaction(expense.uid, expense.account_id, expense.eid, -expense.eamount, "expense", "Deleted expense", expense.edate);
 
             return Ok(new { message = "Expense deleted successfully." });
+        }
+
+        // ============================
+        // GET: api/expense/accounts/user/17
+        // ============================
+        [HttpGet("accounts/user/{uid}")]
+        public async Task<IActionResult> GetAccounts(int uid)
+        {
+            var accounts = await _context.Accounts
+                .Where(a => a.uid == uid)
+                .ToListAsync();
+            return Ok(accounts);
         }
 
         // ============================

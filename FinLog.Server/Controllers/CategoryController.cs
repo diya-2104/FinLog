@@ -1,4 +1,4 @@
-﻿using FinLog.Server.Data;
+using FinLog.Server.Data;
 using FinLog.Server.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -50,7 +50,7 @@ namespace FinLog.Server.Controllers
                 return BadRequest("Category data is invalid.");
 
             // Optional: check if user exists
-            var userExists = await _context.User.AnyAsync(u => u.uid == category.uid);
+            var userExists = await _context.Users.AnyAsync(u => u.uid == category.uid);
             if (!userExists)
                 return BadRequest($"User with id {category.uid} not found.");
 

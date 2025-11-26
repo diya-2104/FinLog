@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "../styles/Expense.css";
-import api from "../api/api"; // axios instance
+import api from "../api/api";
+import Navbar from "./Navbar";
 
 const Expense = () => {
     const [avatarLetter, setAvatarLetter] = useState("");
     const navigate = useNavigate();
     const [showModal, setShowModal] = useState(false);
-    const [formData, setFormData] = useState({ edate: "", cid: "", eamount: "" });
+    const [formData, setFormData] = useState({ edate: "", cid: "", eamount: "", account_id: "" });
     const [categories, setCategories] = useState([]);
+    const [accounts, setAccounts] = useState([]);
     const [expenses, setExpenses] = useState([]);
     const [userId, setUserId] = useState(null);
     const [loadingCategories, setLoadingCategories] = useState(true);
@@ -28,7 +30,8 @@ const Expense = () => {
 
         if (user.uid) {
             fetchCategories(user.uid);
-            fetchMonthlyBills(user.uid);   // ? ADDED
+            fetchAccounts(user.uid);
+            fetchMonthlyBills(user.uid);
         }
     }, []);
 
@@ -59,6 +62,16 @@ const Expense = () => {
         }
     };
 
+    // Fetch accounts
+    const fetchAccounts = async (uid) => {
+        try {
+            const res = await api.get(`/api/expense/accounts/user/${uid}`);
+            setAccounts(res.data || []);
+        } catch (err) {
+            console.error("Error fetching accounts:", err);
+        }
+    };
+
     // ADDED FUNCTION: Fetch monthly bills
     const fetchMonthlyBills = async (uid) => {
         try {
@@ -80,6 +93,7 @@ const Expense = () => {
         const payload = {
             uid: userId,
             cid: parseInt(cid),
+            account_id: parseInt(formData.account_id),
             edate: new Date(edate).toISOString(),
             eamount: parseFloat(eamount),
         };
@@ -98,7 +112,7 @@ const Expense = () => {
             // Reload monthly bills after save
             fetchMonthlyBills(userId);
 
-            setFormData({ edate: "", cid: "", eamount: "" });
+            setFormData({ edate: "", cid: "", eamount: "", account_id: "" });
             setEditMode(false);
             setEditId(null);
             setShowModal(false);
@@ -112,6 +126,7 @@ const Expense = () => {
         setFormData({
             edate: expense.edate.split("T")[0],
             cid: expense.cid,
+            account_id: expense.account_id,
             eamount: expense.eamount,
         });
         setEditId(expense.eid);
@@ -137,7 +152,7 @@ const Expense = () => {
 
     const handleCancel = () => {
         setShowModal(false);
-        setFormData({ edate: "", cid: "", eamount: "" });
+        setFormData({ edate: "", cid: "", eamount: "", account_id: "" });
         setEditMode(false);
         setEditId(null);
     };
@@ -153,37 +168,7 @@ const Expense = () => {
     return (
         <div className="expense-page">
             <div className="inner-container">
-                <header className="header">
-                    <div className="logo">
-                        <i className="fas fa-chart-line"></i>FinTrack
-                    </div>
-                    <div className="header-actions">
-                        <button className="icon-btn" title="Notifications">
-                            <svg className="notification-icon" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <path d="M12 22c1.1 0 2-.9 2-2H10c0 1.1.9 2 2 2z" />
-                                <path d="M18 16v-5c0-3.31-2.69-6-6-6s-6 2.69-6 6v5l-2 2v1h16v-1l-2-2z" />
-                            </svg>
-                        </button>
-                        <div
-                            className="avatar"
-                            title="View Profile"
-                            onClick={() => navigate("/profile")}
-                            style={{ cursor: "pointer" }}
-                        >
-                            {avatarLetter}
-                        </div>
-                    </div>
-                </header>
-
-                {/* NAVIGATION */}
-                <nav className="tabs">
-                    <NavLink to="/income" className={({ isActive }) => (isActive ? "tab active-tab" : "tab")}>Income</NavLink>
-                    <NavLink to="/expense" className={({ isActive }) => (isActive ? "tab active-tab" : "tab")}>Expense</NavLink>
-                    <NavLink to="/category" className={({ isActive }) => (isActive ? "tab active-tab" : "tab")}>Category</NavLink>
-                    <NavLink to="/transaction" className={({ isActive }) => (isActive ? "tab active-tab" : "tab")}>Transaction</NavLink>
-                    <NavLink to="/report" className={({ isActive }) => (isActive ? "tab active-tab" : "tab")}>Reports</NavLink>
-                </nav>
+                <Navbar avatarLetter={avatarLetter} />
 
                 {/* FINANCIAL CARDS */}
                 <div className="cards">
@@ -192,7 +177,7 @@ const Expense = () => {
                         <h3>{totalExpenses.toFixed(2)}</h3>
                     </div>
 
-                    {/* MONTHLY BILLS CARD — UPDATED */}
+                    {/* MONTHLY BILLS CARD ï¿½ UPDATED */}
                     <div className="finance-card">
                         <p>Monthly Bills</p>
                         <h3>{backendMonthlyBills.toFixed(2)}</h3>
@@ -265,6 +250,16 @@ const Expense = () => {
                         <label>Amount</label>
                         <input type="number" name="eamount" value={formData.eamount} onChange={handleInputChange} />
 
+                        <label>Account</label>
+                        <select name="account_id" value={formData.account_id} onChange={handleInputChange}>
+                            <option value="">Select Account</option>
+                            {accounts.map((acc) => (
+                                <option key={acc.account_id} value={acc.account_id}>
+                                    {acc.account_name} (â‚¹{acc.balance.toFixed(2)})
+                                </option>
+                            ))}
+                        </select>
+
                         <label>Category</label>
                         <select name="cid" value={formData.cid} onChange={handleInputChange}>
                             {loadingCategories ? (
@@ -291,7 +286,7 @@ const Expense = () => {
             )}
 
             <footer className="footer">
-                © 2025 FinanceTracker. All rights reserved.
+                ï¿½ 2025 FinanceTracker. All rights reserved.
             </footer>
         </div>
     );

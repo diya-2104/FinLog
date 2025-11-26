@@ -18,7 +18,7 @@ namespace FinLog.Server.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUser(int id)
         {
-            var user = await _context.User
+            var user = await _context.Users
                 .Where(u => u.uid == id)
                 .Select(u => new
                 {

@@ -22,7 +22,7 @@ namespace FinLog.Server.Controllers
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
-            var user = await _context.User.FirstOrDefaultAsync(u => u.email == request.email);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.email == request.email);
 
             if (user == null)
             {

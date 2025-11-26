@@ -34,19 +34,19 @@ namespace FinLog.Server.Controllers
         }
 
         [HttpGet("category-summary/{uid}")]
-        public async Task<IActionResult> GetCategorySummary(int uid)
-        {
-            var data = await _context.Transactions
-                .Where(t => t.uid == uid && t.ttype == "expense")
-                .GroupBy(t => t.cid)
-                .Select(g => new {
-                    category = _context.Categories.First(c => c.cid == g.Key).cname,
-                    total = g.Sum(x => x.tamount)
-                })
-                .ToListAsync();
+        //public async Task<IActionResult> GetCategorySummary(int uid)
+        //{
+        //    var data = await _context.Transactions
+        //        .Where(t => t.uid == uid && t.ttype == "expense")
+        //        .GroupBy(t => t.cid)
+        //        .Select(g => new {
+        //            category = _context.Categories.First(c => c.cid == g.Key).cname,
+        //            total = g.Sum(x => x.tamount)
+        //        })
+        //        .ToListAsync();
 
-            return Ok(data);
-        }
+        //    return Ok(data);
+        //}
 
         [HttpGet("income-expense/{uid}")]
         public async Task<IActionResult> GetIncomeVsExpense(int uid)

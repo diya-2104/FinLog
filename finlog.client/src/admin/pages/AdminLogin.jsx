@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../api/api';
 import '../styles/admin.css';
 
 export default function AdminLogin() {
@@ -9,9 +9,10 @@ export default function AdminLogin() {
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
-    const handleLogin = async () => {
+    const handleLogin = async (e) => {
+        e.preventDefault();
         try {
-            await axios.post('/api/admin/auth/login', { email, password }, { withCredentials: true });
+            await api.post('/api/admin/auth/login', { email, password });
             navigate('/admin/dashboard');
         } catch {
             setError('Invalid credentials');
@@ -21,9 +22,11 @@ export default function AdminLogin() {
     return (
         <div className="admin-login">
             <h2>FinLog Admin</h2>
-            <input placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
-            <input placeholder="Password" type="password" value={password} onChange={e => setPassword(e.target.value)} />
-            <button onClick={handleLogin}>Login</button>
+            <form onSubmit={handleLogin}>
+                <input placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
+                <input placeholder="Password" type="password" value={password} onChange={e => setPassword(e.target.value)} />
+                <button type="submit">Login</button>
+            </form>
             {error && <p className="error">{error}</p>}
         </div>
     );

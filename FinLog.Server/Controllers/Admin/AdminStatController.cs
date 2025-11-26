@@ -24,7 +24,7 @@ namespace FinLog.Server.Controllers.Admin
             
             try
             {
-                var allUsers = await _db.User.ToListAsync();
+                var allUsers = await _db.Users.ToListAsync();
                 Console.WriteLine($"All users count: {allUsers.Count}");
                 
                 var totalUsers = allUsers.Count;

@@ -25,7 +25,7 @@ namespace FinLog.Server.Controllers
         [HttpPost]
         public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {
-            if (await _context.User.AnyAsync(u => u.email == request.email))
+            if (await _context.Users.AnyAsync(u => u.email == request.email))
             {
                 return BadRequest(new { message = "Email already registered" });
             }
@@ -42,7 +42,7 @@ namespace FinLog.Server.Controllers
 
             user.password = _passwordHasher.HashPassword(user, request.password);
 
-            _context.User.Add(user);
+            _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
             try
@@ -61,7 +61,7 @@ namespace FinLog.Server.Controllers
         [HttpGet("verify")]
         public async Task<IActionResult> VerifyEmail([FromQuery] string token)
         {
-            var user = await _context.User.FirstOrDefaultAsync(u => u.EmailVerificationToken == token);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.EmailVerificationToken == token);
             
             if (user == null)
                 return BadRequest(new { message = "Invalid verification token" });
