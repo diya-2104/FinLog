@@ -97,6 +97,7 @@ namespace FinLog.Server.Controllers
         {
             var transactions = await _context.Transactions
                 .Include(t => t.Category)
+                .Include(t => t.Account)
                 .Where(t => t.uid == uid)
                 .OrderByDescending(t => t.created_at)
                 .Select(t => new TransactionDto
@@ -105,6 +106,8 @@ namespace FinLog.Server.Controllers
                     uid = t.uid,
                     cid = t.cid,
                     cname = t.Category != null ? t.Category.cname : null,
+                    account_id = t.account_id,
+                    account_name = t.Account != null ? t.Account.account_name : null,
                     ttype = t.ttype,
                     description = t.description,
                     tamount = t.tamount,
@@ -123,6 +126,7 @@ namespace FinLog.Server.Controllers
         {
             var query = _context.Transactions
                                 .Include(t => t.Category)
+                                  .Include(t => t.Account)
                                 .Where(t => t.uid == uid);
 
             if (!string.IsNullOrWhiteSpace(q))
@@ -130,6 +134,7 @@ namespace FinLog.Server.Controllers
                 q = q.ToLower();
                 query = query.Where(t =>
                     (t.Category != null && t.Category.cname.ToLower().Contains(q)) ||
+                    (t.Account != null && t.Account.account_name.ToLower().Contains(q)) || // search by account name
                     t.ttype.ToLower().Contains(q) ||
                     (t.description != null && t.description.ToLower().Contains(q)) ||
                     t.tamount.ToString().Contains(q) ||
@@ -145,6 +150,8 @@ namespace FinLog.Server.Controllers
                     uid = t.uid,
                     cid = t.cid,
                     cname = t.Category != null ? t.Category.cname : null,
+                    account_id = t.account_id,
+                    account_name = t.Account != null ? t.Account.account_name : null,
                     ttype = t.ttype,
                     description = t.description,
                     tamount = t.tamount,
@@ -155,6 +162,7 @@ namespace FinLog.Server.Controllers
             return Ok(transactions);
         }
 
+
         // ============================
         // GET: api/transactions/{tid}
         // ============================
@@ -163,6 +171,7 @@ namespace FinLog.Server.Controllers
         {
             var t = await _context.Transactions
                 .Include(t => t.Category)
+                .Include(t => t.Account)
                 .FirstOrDefaultAsync(t => t.tid == tid);
 
             if (t == null)
@@ -174,11 +183,14 @@ namespace FinLog.Server.Controllers
                 uid = t.uid,
                 cid = t.cid,
                 cname = t.Category != null ? t.Category.cname : null,
+                account_id = t.account_id,
+                account_name = t.Account != null ? t.Account.account_name : null,
                 ttype = t.ttype,
                 description = t.description,
                 tamount = t.tamount,
                 created_at = t.created_at
             };
+
 
             return Ok(dto);
         }

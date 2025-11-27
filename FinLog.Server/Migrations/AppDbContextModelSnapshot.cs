@@ -22,6 +22,38 @@ namespace FinLog.Server.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("FinLog.Server.Models.Account", b =>
+                {
+                    b.Property<int>("account_id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("account_id"));
+
+                    b.Property<string>("account_name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("account_type")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<decimal>("balance")
+                        .HasColumnType("numeric");
+
+                    b.Property<DateTime>("created_at")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("uid")
+                        .HasColumnType("integer");
+
+                    b.HasKey("account_id");
+
+                    b.HasIndex("uid");
+
+                    b.ToTable("Account");
+                });
+
             modelBuilder.Entity("FinLog.Server.Models.Category", b =>
                 {
                     b.Property<int>("cid")
@@ -46,6 +78,35 @@ namespace FinLog.Server.Migrations
                     b.HasIndex("uid");
 
                     b.ToTable("Category");
+                });
+
+            modelBuilder.Entity("FinLog.Server.Models.Expense", b =>
+                {
+                    b.Property<int>("eid")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("eid"));
+
+                    b.Property<int>("cid")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("eamount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("edate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("uid")
+                        .HasColumnType("integer");
+
+                    b.HasKey("eid");
+
+                    b.HasIndex("cid");
+
+                    b.HasIndex("uid");
+
+                    b.ToTable("Expense");
                 });
 
             modelBuilder.Entity("FinLog.Server.Models.Income", b =>
@@ -82,6 +143,43 @@ namespace FinLog.Server.Migrations
                     b.ToTable("Income");
                 });
 
+            modelBuilder.Entity("FinLog.Server.Models.Transactions", b =>
+                {
+                    b.Property<int>("tid")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("tid"));
+
+                    b.Property<int>("cid")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("created_at")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("description")
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)");
+
+                    b.Property<decimal>("tamount")
+                        .HasColumnType("decimal(10,2)");
+
+                    b.Property<string>("ttype")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("uid")
+                        .HasColumnType("integer");
+
+                    b.HasKey("tid");
+
+                    b.HasIndex("cid");
+
+                    b.HasIndex("uid");
+
+                    b.ToTable("Transactions");
+                });
+
             modelBuilder.Entity("FinLog.Server.Models.User", b =>
                 {
                     b.Property<int>("uid")
@@ -89,6 +187,12 @@ namespace FinLog.Server.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("uid"));
+
+                    b.Property<string>("EmailVerificationToken")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsEmailVerified")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("email")
                         .IsRequired()
@@ -111,6 +215,17 @@ namespace FinLog.Server.Migrations
                     b.ToTable("User", (string)null);
                 });
 
+            modelBuilder.Entity("FinLog.Server.Models.Account", b =>
+                {
+                    b.HasOne("FinLog.Server.Models.User", "User")
+                        .WithMany("Accounts")
+                        .HasForeignKey("uid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("FinLog.Server.Models.Category", b =>
                 {
                     b.HasOne("FinLog.Server.Models.User", "User")
@@ -118,6 +233,25 @@ namespace FinLog.Server.Migrations
                         .HasForeignKey("uid")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("FinLog.Server.Models.Expense", b =>
+                {
+                    b.HasOne("FinLog.Server.Models.Category", "Category")
+                        .WithMany("Expenses")
+                        .HasForeignKey("cid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FinLog.Server.Models.User", "User")
+                        .WithMany("Expenses")
+                        .HasForeignKey("uid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
 
                     b.Navigation("User");
                 });
@@ -141,16 +275,45 @@ namespace FinLog.Server.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("FinLog.Server.Models.Transactions", b =>
+                {
+                    b.HasOne("FinLog.Server.Models.Category", "Category")
+                        .WithMany("Transactions")
+                        .HasForeignKey("cid")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("FinLog.Server.Models.User", "User")
+                        .WithMany("Transactions")
+                        .HasForeignKey("uid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("FinLog.Server.Models.Category", b =>
                 {
+                    b.Navigation("Expenses");
+
                     b.Navigation("Incomes");
+
+                    b.Navigation("Transactions");
                 });
 
             modelBuilder.Entity("FinLog.Server.Models.User", b =>
                 {
+                    b.Navigation("Accounts");
+
                     b.Navigation("Categories");
 
+                    b.Navigation("Expenses");
+
                     b.Navigation("Incomes");
+
+                    b.Navigation("Transactions");
                 });
 #pragma warning restore 612, 618
         }

@@ -13,6 +13,11 @@ namespace FinLog.Server.Models
         [Required]
         public DateTime date { get; set; }
 
+        [Required] 
+        public int account_id { get; set; }
+        [ForeignKey("account_id")] 
+        public Account? Account { get; set; }
+
         [Required]
         [Column(TypeName = "decimal(18,2)")]
         public decimal amount { get; set; }

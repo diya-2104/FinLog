@@ -37,14 +37,15 @@ const Transaction = () => {
         }
     };
 
-    // Live search/filter
+    // Live search/filter by category or account
     useEffect(() => {
         if (!searchText.trim()) {
             setFilteredTransactions(transactions);
             return;
         }
         const filtered = transactions.filter(t =>
-            (t.cname || "").toLowerCase().includes(searchText.toLowerCase())
+            ((t.cname || "").toLowerCase().includes(searchText.toLowerCase())) ||
+            ((t.account_name || "").toLowerCase().includes(searchText.toLowerCase()))
         );
         setFilteredTransactions(filtered);
     }, [searchText, transactions]);
@@ -79,6 +80,7 @@ const Transaction = () => {
                     <NavLink to="/income" className={({ isActive }) => isActive ? "tab active-tab" : "tab"}>Income</NavLink>
                     <NavLink to="/expense" className={({ isActive }) => isActive ? "tab active-tab" : "tab"}>Expense</NavLink>
                     <NavLink to="/category" className={({ isActive }) => isActive ? "tab active-tab" : "tab"}>Category</NavLink>
+                    <NavLink to="/account" className={({ isActive }) => isActive ? "tab active-tab" : "tab"}>Account</NavLink>
                     <NavLink to="/transaction" className={({ isActive }) => isActive ? "tab active-tab" : "tab"}>Transaction</NavLink>
                     <NavLink to="/report" className={({ isActive }) => isActive ? "tab active-tab" : "tab"}>Reports</NavLink>
                 </nav>
@@ -93,7 +95,7 @@ const Transaction = () => {
                     <div className="filter-container">
                         <input
                             type="text"
-                            placeholder="Search Category..."
+                            placeholder="Search Category or Account..."
                             value={searchText}
                             onChange={(e) => setSearchText(e.target.value)}
                             className="category-search-input"
@@ -107,18 +109,20 @@ const Transaction = () => {
                                 <tr>
                                     <th>Type</th>
                                     <th>Category</th>
+                                    <th>Account</th>
                                     <th>Amount</th>
                                     <th>Date</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {filteredTransactions.length === 0 ? (
-                                    <tr><td colSpan="4">No transactions</td></tr>
+                                    <tr><td colSpan="5">No transactions</td></tr>
                                 ) : (
                                     filteredTransactions.map(t => (
                                         <tr key={t.tid}>
                                             <td>{t.ttype}</td>
                                             <td>{t.cname || "-"}</td>
+                                            <td>{t.account_name || "-"}</td>
                                             <td className={`transaction-amount ${t.ttype}`}>{parseFloat(t.tamount).toFixed(2)}</td>
                                             <td>{new Date(t.created_at).toLocaleDateString()}</td>
                                         </tr>

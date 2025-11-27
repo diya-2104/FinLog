@@ -37,7 +37,7 @@ const Banner = () => {
                         <p className="card-change">+10% of target</p>
                     </div>
                 </div>
-                <Link to="/income" className="finance-card">
+                <div className="finance-card">
                     <div className="card-content">
                         <div className="card-header">
                             <h3 className="card-title">Investments</h3>
@@ -46,7 +46,7 @@ const Banner = () => {
                         <p className="card-value">$12,345.00</p>
                         <p className="card-change text-green-400">+7.8% YTD</p>
                     </div>
-                </Link>
+                </div>
                 <div className="finance-card">
                     <div className="card-content">
                         <div className="card-header">

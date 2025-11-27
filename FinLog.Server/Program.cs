@@ -1,5 +1,6 @@
 using FinLog.Server.Data;
 using FinLog.Server.Models;
+using FinLog.Server.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,6 +26,8 @@ builder.Services.AddCors(options =>
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddDistributedMemoryCache(); // Required for session
 builder.Services.AddSession(options =>
 {
@@ -32,10 +35,13 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
-builder.Services.AddDataProtection(); 
+builder.Services.AddDataProtection();
 
 // Configure Password Hashing Service
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+
+//Configure Email Services/
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 
 var app = builder.Build();

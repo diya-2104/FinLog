@@ -24,6 +24,12 @@ namespace FinLog.Server.Models
         [Required]
         public string ttype { get; set; } = string.Empty;  // income / expense
 
+        public int ref_id { get; set; }
+        [Required] 
+        public int account_id { get; set; }
+        [ForeignKey("account_id")] 
+        public Account? Account { get; set; }
+
         [MaxLength(300)]
         public string? description { get; set; }
 

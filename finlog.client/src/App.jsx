@@ -5,9 +5,14 @@
     import Income from "./components/Income";
     import Expense from "./components/Expense";
     import Category from "./components/Category";
+    import Account from "./components/Account";
     import Transaction from "./components/Transaction";
     import Profile from './components/Profile';
     import Report from './components/Report';
+
+    import AdminLogin from "./admin/pages/AdminLogin";
+    import AdminDashboard from "./admin/pages/Dashboard";
+    import RequireAdmin from "./admin/pages/RequireAdmin";
    
     function App() {
         return (
@@ -20,9 +25,18 @@
                     <Route path="/income" element={<Income />} />
                     <Route path="/expense" element={<Expense />} />
                     <Route path="/category" element={<Category />} />
+                    <Route path="/account" element={<Account />} />
                     <Route path="/transaction" element={<Transaction />} />
                     <Route path="/profile" element={<Profile />} />
                     <Route path="/report" element={<Report />} />
+
+
+                    <Route path="/admin/login" element={<AdminLogin />} />
+                    <Route path="/admin/dashboard" element={
+                    <RequireAdmin>
+                        <AdminDashboard />
+                    </RequireAdmin>
+                } />
                    
 
 

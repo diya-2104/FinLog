@@ -1,0 +1,301 @@
+/* ============================
+   ACCOUNT PAGE (Dark Theme)
+============================ */
+
+.account-page {
+    font-family: Arial, sans-serif;
+    background-color: #000;
+    color: #fff;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 16px;
+    box-sizing: border-box;
+    overflow-x: auto;
+    overflow-y: auto;
+    font-size: 16px;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+    /* Inner Container */
+    .account-page .inner-container {
+        min-width: 1200px;
+        box-sizing: border-box;
+    }
+
+    /* ============================
+   HEADER
+============================ */
+
+    .account-page .header {
+        background-color: #111;
+        padding: 20px 16px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.6);
+    }
+
+    .account-page .logo {
+        display: flex;
+        align-items: center;
+        font-weight: 600;
+        font-size: 18px;
+        color: #fff;
+    }
+
+        .account-page .logo i {
+            margin-right: 8px;
+            color: #60A5FA;
+            font-size: 24px;
+        }
+
+    .account-page .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .account-page .icon-btn {
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 4px;
+        display: flex;
+        align-items: center;
+    }
+
+    .account-page .notification-icon {
+        width: 28px;
+        height: 25px;
+        stroke: #fff;
+        transition: transform 0.3s ease;
+    }
+
+        .account-page .notification-icon:hover {
+            transform: scale(1.1);
+            stroke: #3b82f6;
+        }
+
+    .account-page .avatar {
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        color: #fff;
+        font-size: 15px;
+    }
+
+    /* ============================
+   TABS
+============================ */
+
+    .account-page .tabs {
+        display: flex;
+        gap: 28px;
+        border-bottom: 1px solid #333;
+        margin-bottom: 28px;
+        flex-wrap: wrap;
+        padding: 12px 0;
+    }
+
+    .account-page .tab {
+        padding: 20px 6px;
+        font-size: 16px;
+        color: #aaa;
+        text-decoration: none;
+        border-bottom: 2px solid transparent;
+        transition: 0.3s;
+    }
+
+        .account-page .tab:hover {
+            color: #fff;
+        }
+
+    .account-page .active-tab {
+        border-bottom: 3px solid #667eea;
+        color: #667eea;
+        font-weight: 600;
+    }
+
+/* ============================
+   CARDS LIST
+============================ */
+
+.account-content {
+    padding: 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.main-content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+    .main-content-header h2 {
+        color: #fff;
+        margin: 0;
+    }
+
+.add-account-btn {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: transform 0.2s ease;
+}
+
+    .add-account-btn:hover {
+        transform: translateY(-2px);
+    }
+
+.account-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 22px;
+}
+
+.account-card {
+    background: #1f1f1f;
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+    .account-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+    }
+
+.card-header {
+    margin-bottom: 12px;
+}
+
+.account-name {
+    font-size: 18px;
+    font-weight: bold;
+    color: #fff;
+}
+
+.account-type {
+    color: #aaa;
+    font-size: 14px;
+}
+
+.account-balance {
+    font-size: 17px;
+    color: #22c55e;
+    font-weight: bold;
+    margin: 10px 0 15px 0;
+}
+
+.actions {
+    display: flex;
+    gap: 16px;
+}
+
+    .actions i {
+        color: #aaa;
+        cursor: pointer;
+        padding: 6px;
+        border-radius: 6px;
+        transition: all 0.2s;
+    }
+
+        .actions i:hover {
+            background: #333;
+            color: #fff;
+        }
+
+.fa-trash-alt:hover {
+    color: #dc2626 !important;
+}
+
+/* ============================
+   MODAL
+============================ */
+
+.account-page .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.account-page .modal {
+    background: #1f1f1f;
+    padding: 28px;
+    border-radius: 12px;
+    width: 420px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.6);
+}
+
+    .account-page .modal h3 {
+        margin-bottom: 20px;
+        font-size: 22px;
+        color: #60A5FA;
+    }
+
+    .account-page .modal input {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 16px;
+        border-radius: 6px;
+        border: 1px solid #333;
+        background: #111;
+        color: #fff;
+        font-size: 15px;
+    }
+
+        .account-page .modal input:focus {
+            border-color: #3b82f6;
+        }
+
+.account-page .modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+    .account-page .modal-actions button:first-child {
+        background: #667eea;
+        color: #fff;
+    }
+
+.account-page .cancel-btn {
+    background: #444;
+    color: #fff;
+}
+
+/* ============================
+   FOOTER
+============================ */
+
+.account-page .footer {
+    background-color: #111;
+    border-top: 1px solid #333;
+    padding: 20px;
+    text-align: center;
+    color: #aaa;
+    font-size: 15px;
+}

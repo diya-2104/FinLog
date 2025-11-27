@@ -10,6 +10,8 @@ namespace FinLog.Server.Data
 
         public DbSet<User> User { get; set; }
         public DbSet<Category> Categories { get; set; }
+
+        public DbSet<Account> Accounts { get; set; }
         public DbSet<Income> Incomes { get; set; }
         public DbSet<Expense> Expenses { get; set; }
 
@@ -22,6 +24,12 @@ namespace FinLog.Server.Data
                 .HasOne(c => c.User)
                 .WithMany(u => u.Categories)
                 .HasForeignKey(c => c.uid)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Account>()
+                .HasOne(a => a.User)
+                .WithMany(u => u.Accounts)
+                .HasForeignKey(a => a.uid)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Income>()
