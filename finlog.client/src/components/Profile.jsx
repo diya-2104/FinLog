@@ -70,6 +70,12 @@ const Profile = () => {
         feather.replace();
     }, [user]);
 
+    useEffect(() => {
+        if (user.fname) {
+            localStorage.setItem("user", JSON.stringify(user));
+        }
+    }, [user]);
+
     //  Generate first letter avatar
     const getInitialLetter = () => {
         return user.fname ? user.fname.charAt(0).toUpperCase() : "U";

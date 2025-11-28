@@ -1,0 +1,174 @@
+/* ================= IMPORT FONT THAT SUPPORTS ? ================= */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap');
+
+/* ================= DASHBOARD WIDGET CONTAINER ================= */
+.dashboard-widgets {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    box-sizing: border-box;
+    /* Apply correct font globally */
+    font-family: 'Noto Sans', sans-serif !important;
+}
+
+    /* ================= SUMMARY CARDS ================= */
+    .dashboard-widgets .summary-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: space-between;
+    }
+
+    .dashboard-widgets .summary-card {
+        flex: 0 0 calc((100% - 60px) / 4);
+        max-width: calc((100% - 60px) / 4);
+        padding: 20px;
+        border-radius: 14px;
+        background: #1F2937;
+        box-shadow: 0 10px 20px rgba(0, 0, 139, 0.25);
+        border-left: 6px solid transparent;
+        transition: all 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+        .dashboard-widgets .summary-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
+        }
+
+        /* Card title */
+        .dashboard-widgets .summary-card h3 {
+            margin: 0;
+            font-size: 17px;
+            font-weight: 600;
+            color: #E5E7EB;
+        }
+
+    /* ? REMOVED — Rupee symbol (React will add ?) */
+    .dashboard-widgets .amount::before,
+    .dashboard-widgets .savings-card .amount::before {
+        content: "";
+    }
+
+    /* Amount text */
+    .dashboard-widgets .amount {
+        font-size: 26px;
+        margin-top: 10px;
+        font-weight: bold;
+        color: white;
+    }
+
+    /* Gradient icon tag */
+    .dashboard-widgets .tag {
+        display: inline-block;
+        margin-top: 12px;
+        padding: 4px 12px;
+        border-radius: 50px;
+        font-size: 12px;
+        font-weight: 600;
+        color: white;
+    }
+
+    .dashboard-widgets .positive {
+        background: linear-gradient(135deg, #22C55E, #16A34A);
+    }
+
+    .dashboard-widgets .negative {
+        background: linear-gradient(135deg, #EF4444, #B91C1C);
+    }
+
+    .dashboard-widgets .stable {
+        background: linear-gradient(135deg, #6366F1, #4F46E5);
+    }
+
+    /* Colored left borders */
+    .dashboard-widgets .income-card {
+        border-left-color: #22C55E;
+    }
+
+    .dashboard-widgets .expense-card {
+        border-left-color: #EF4444;
+    }
+
+    .dashboard-widgets .balance-card {
+        border-left-color: #6366F1;
+    }
+
+    .dashboard-widgets .categories-card {
+        border-left-color: #6366F1;
+    }
+
+    /* ================= SAVINGS MOTIVATION CARD ================= */
+    .dashboard-widgets .savings-card {
+        padding: 24px;
+        border-radius: 16px;
+        background: #111827;
+        color: white;
+        box-shadow: 0 10px 20px rgba(0, 0, 139, 0.3);
+        text-align: center;
+        border: 1px solid #1F2937;
+        transition: 0.3s;
+        width: 95%;
+        max-width: 100%;
+        margin: 0 auto;
+    }
+
+        .dashboard-widgets .savings-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 26px rgba(0, 0, 0, 0.4);
+        }
+
+        .dashboard-widgets .savings-card h2 {
+            font-size: 24px;
+            margin: 0 0 8px 0;
+            font-weight: 700;
+        }
+
+        .dashboard-widgets .savings-card p {
+            margin: 0;
+            font-size: 15px;
+            color: #9CA3AF;
+        }
+
+/* ================= RESPONSIVE ================= */
+@media screen and (max-width: 1024px) {
+    .dashboard-widgets .summary-card {
+        flex: 0 0 calc((100% - 40px) / 3);
+        max-width: calc((100% - 40px) / 3);
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .dashboard-widgets .summary-card {
+        flex: 0 0 calc((100% - 20px) / 2);
+        max-width: calc((100% - 20px) / 2);
+        padding: 16px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .dashboard-widgets {
+        padding: 15px 10px;
+    }
+
+        .dashboard-widgets .summary-card {
+            flex: 0 0 100%;
+            max-width: 100%;
+            padding: 12px;
+        }
+
+        .dashboard-widgets .amount {
+            font-size: 22px;
+        }
+
+        .dashboard-widgets .tag {
+            font-size: 10px;
+            padding: 3px 10px;
+        }
+}
