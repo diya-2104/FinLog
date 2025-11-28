@@ -1,23 +1,41 @@
-import React from "react";
+﻿import React from "react";
+import { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import "../styles/Navbar.css";
 
 const Navbar = ({ avatarLetter }) => {
     const navigate = useNavigate();
+        const [darkMode, setDarkMode] = useState(() => {
+            return localStorage.getItem("theme") === "dark";
+        });
+
+        useEffect(() => {
+            const containers = document.querySelectorAll('.inner-container');
+            if (darkMode) {
+                document.body.classList.add("dark-mode");
+                containers.forEach(container => container.classList.add("dark-mode"));
+                localStorage.setItem("theme", "dark");
+            } else {
+                document.body.classList.remove("dark-mode");
+                containers.forEach(container => container.classList.remove("dark-mode"));
+                localStorage.setItem("theme", "light");
+            }
+        }, [darkMode]);
 
     return (
         <>
             <header className="navbar-header">
                 <div className="navbar-logo">
-                    <i className="fas fa-chart-line"></i>
-                    <span>FinTrack</span>
+                    <i className="fas fa-chart-line"> </i>
+                    <span>FinLog</span>
                 </div>
                 <div className="navbar-actions">
-                    <button className="navbar-icon-btn" title="Notifications">
-                        <svg className="navbar-notification-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M12 22c1.1 0 2-.9 2-2H10c0 1.1.9 2 2 2z"></path>
-                            <path d="M18 16v-5c0-3.31-2.69-6-6-6s-6 2.69-6 6v5l-2 2v1h16v-1l-2-2z"></path>
-                        </svg>
+                    {/* Toggle Button */}
+                    <button
+                        className="theme-toggle-btn"
+                        onClick={() => setDarkMode(!darkMode)}
+                    >
+                        {darkMode ? "🌙" : "☀️"}
                     </button>
                     <div className="navbar-avatar" title="View Profile" onClick={() => navigate("/profile")} style={{ cursor: "pointer" }}>
                         {avatarLetter}

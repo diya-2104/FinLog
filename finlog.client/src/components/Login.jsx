@@ -113,7 +113,7 @@ const Login = ({ isOpen, onClose }) => {
                         <input
                             type="password"
                             id="password"
-                            placeholder="••••••••"
+                            placeholder="ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"
                             className="input-highlight"
                             value={formData.password}
                             onChange={handleChange}
@@ -138,20 +138,20 @@ const Login = ({ isOpen, onClose }) => {
                         Sign In
                     </button>
                 </form>
-                <div className="divider">Or sign in with</div>
+                {/*<div className="divider">Or sign in with</div>*/}
 
                 {/* Social Buttons */}
-                <div className="social-buttons">
-                    <button className="social-btn google">
-                        <i className="fab fa-google"></i>
-                    </button>
-                    <button className="social-btn facebook">
-                        <i className="fab fa-facebook-f"></i>
-                    </button>
-                    <button className="social-btn twitter">
-                        <i className="fab fa-twitter"></i>
-                    </button>
-                </div>
+                {/*<div className="social-buttons">*/}
+                {/*    <button className="social-btn google">*/}
+                {/*        <i className="fab fa-google"></i>*/}
+                {/*    </button>*/}
+                {/*    <button className="social-btn facebook">*/}
+                {/*        <i className="fab fa-facebook-f"></i>*/}
+                {/*    </button>*/}
+                {/*    <button className="social-btn twitter">*/}
+                {/*        <i className="fab fa-twitter"></i>*/}
+                {/*    </button>*/}
+                {/*</div>*/}
 
                 {/* Signup Text */}
                 <div className="signup-text">

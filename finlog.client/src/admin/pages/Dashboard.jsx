@@ -1,5 +1,5 @@
 //import { useEffect, useState } from 'react';
-//import axios from 'axios';
+import axios from 'axios';
 //import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 //import { Pie } from 'react-chartjs-2';
 //import '../styles/admin.css';
@@ -88,27 +88,25 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 export default function Dashboard() {
     const [stats, setStats] = useState(null);
     const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(null);
 
     useEffect(() => {
         console.log('Making API call to /api/admin/stats');
 
-        api.get('/api/admin/stats')
+        axi.get('/api/admin/stats', {withCredentials :true})
             .then(res => {
                 const d = res.data;
 
                 console.log("Raw API Response:", d);
 
                 // Convert to numbers to avoid chart condition bugs
-                const parsed = {
+                setStats({
                     TotalUsers: Number(d.TotalUsers) || 0,
                     VerifiedUsers: Number(d.VerifiedUsers) || 0,
-                    UnverifiedUsers: Number(d.UnverifiedUsers) || 0,
-                    ActiveUsers: Number(d.ActiveUsers) || 0
-                };
+                    UnverifiedUsers = Number(d.UnverifiedUsers) || 0,
+                    ActiveUsers : Number(d.ActiveUsers) || 0
 
-                console.log("Parsed Stats:", parsed);
-
-                setStats(parsed);
+                });
             })
             .catch(err => {
                 console.error("Stats fetch error:", err);

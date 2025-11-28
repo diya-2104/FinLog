@@ -3,12 +3,13 @@ import { useNavigate } from "react-router-dom";
 import "../styles/Expense.css";
 import api from "../api/api";
 import Navbar from "./Navbar";
+import Footer from "./Footer";
 
 const Expense = () => {
     const [avatarLetter, setAvatarLetter] = useState("");
     const navigate = useNavigate();
     const [showModal, setShowModal] = useState(false);
-    const [formData, setFormData] = useState({ edate: "", cid: "", eamount: "", account_id: "" });
+    const [formData, setFormData] = useState({ edate: "", cid: "", eamount: "", account_id: "", description: "" });
     const [categories, setCategories] = useState([]);
     const [accounts, setAccounts] = useState([]);
     const [expenses, setExpenses] = useState([]);
@@ -96,6 +97,7 @@ const Expense = () => {
             account_id: parseInt(formData.account_id),
             edate: new Date(edate).toISOString(),
             eamount: parseFloat(eamount),
+            description: formData.description,
         };
 
         try {
@@ -112,7 +114,7 @@ const Expense = () => {
             // Reload monthly bills after save
             fetchMonthlyBills(userId);
 
-            setFormData({ edate: "", cid: "", eamount: "", account_id: "" });
+            setFormData({ edate: "", cid: "", eamount: "", account_id: "", description: "" });
             setEditMode(false);
             setEditId(null);
             setShowModal(false);
@@ -128,6 +130,7 @@ const Expense = () => {
             cid: expense.cid,
             account_id: expense.account_id,
             eamount: expense.eamount,
+            description: expense.description || "",
         });
         setEditId(expense.eid);
         setEditMode(true);
@@ -152,7 +155,7 @@ const Expense = () => {
 
     const handleCancel = () => {
         setShowModal(false);
-        setFormData({ edate: "", cid: "", eamount: "", account_id: "" });
+        setFormData({ edate: "", cid: "", eamount: "", account_id: "", description: "" });
         setEditMode(false);
         setEditId(null);
     };
@@ -170,26 +173,29 @@ const Expense = () => {
             <div className="inner-container">
                 <Navbar avatarLetter={avatarLetter} />
 
-                {/* FINANCIAL CARDS */}
+                {/* Expenses CARDS */}
                 <div className="cards">
-                    <div className="finance-card">
+                    {/* Total Expenses Card */}
+                    <div className="expense-card">
                         <p>Total Expenses</p>
-                        <h3>{totalExpenses.toFixed(2)}</h3>
+                        <h3>{totalExpenses ? totalExpenses.toFixed(2) : "0.00"}</h3>
                     </div>
 
-                    {/* MONTHLY BILLS CARD � UPDATED */}
-                    <div className="finance-card">
+                    {/* Monthly Bills Card */}
+                    <div className="expense-card">
                         <p>Monthly Bills</p>
-                        <h3>{backendMonthlyBills.toFixed(2)}</h3>
+                        <h3>{backendMonthlyBills ? backendMonthlyBills.toFixed(2) : "0.00"}</h3>
                     </div>
 
-                    {latestExpenseCategory && (
-                        <div className="finance-card">
+                    {/* Last Expense Card (only if data exists) */}
+                    {latestExpenseCategory && latestExpenseAmount !== undefined && (
+                        <div className="expense-card">
                             <p>Last Expense: {latestExpenseCategory}</p>
                             <h3>{latestExpenseAmount.toFixed(2)}</h3>
                         </div>
                     )}
                 </div>
+
 
                 {/* Recent Expenses Table */}
                 <div className="recent-expense">
@@ -239,6 +245,7 @@ const Expense = () => {
                         </tbody>
                     </table>
                 </div>
+                <Footer />
             </div>
 
             {/* Modal */}
@@ -277,6 +284,9 @@ const Expense = () => {
                         <label>Date</label>
                         <input type="date" name="edate" value={formData.edate} onChange={handleInputChange} />
 
+                        <label>Description (Optional)</label>
+                        <input type="text" name="description" placeholder="Enter description" value={formData.description} onChange={handleInputChange} />
+
                         <div className="modal-actions">
                             <button className="save-btn" onClick={handleSave}>{editMode ? "Update" : "Save"}</button>
                             <button className="cancel-btn" onClick={handleCancel}>Cancel</button>
@@ -285,9 +295,6 @@ const Expense = () => {
                 </div>
             )}
 
-            <footer className="footer">
-                � 2025 FinanceTracker. All rights reserved.
-            </footer>
         </div>
     );
 };

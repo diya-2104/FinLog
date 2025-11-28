@@ -13,7 +13,7 @@ const Header = () => {
                 <div className="container">
                     <div className="logo">
                         <i className="fas fa-chart-line"></i>
-                        <h1>FinTrack</h1>
+                        <h1>FinLog</h1>
                     </div>
                     <div className="auth-buttons">
                         <button

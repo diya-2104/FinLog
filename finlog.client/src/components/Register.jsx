@@ -133,7 +133,7 @@ const Register = ({ isOpen, onClose, onSwitchToLogin }) => {
                         <input
                             type="password"
                             id="reg-password"
-                            placeholder="••••••••"
+                            placeholder="ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"
                             className="input-highlight"
                             value={formData.password}
                             onChange={(e) => setFormData({ ...formData, password: e.target.value })}

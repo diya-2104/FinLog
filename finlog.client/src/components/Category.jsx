@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/api";
 import Navbar from "./Navbar";
+import Footer from "./Footer";
 import "../styles/Category.css";
 
 const pastelColors = ["#FFD1DC", "#AEC6CF", "#77DD77", "#FFF5BA", "#CBAACB"];
@@ -10,9 +11,15 @@ const getRandomPastel = () => pastelColors[Math.floor(Math.random() * pastelColo
 const Category = () => {
     const [avatarLetter, setAvatarLetter] = useState("");
     const navigate = useNavigate();
+
+    // Modal
     const [showModal, setShowModal] = useState(false);
+
+    // Inputs
     const [categoryName, setCategoryName] = useState("");
     const [categoryColor, setCategoryColor] = useState(getRandomPastel());
+
+    // Data
     const [categories, setCategories] = useState([]);
     const [userId, setUserId] = useState(null);
 
@@ -26,27 +33,24 @@ const Category = () => {
         }
     };
 
+    // Load user + categories
     useEffect(() => {
         const userData = localStorage.getItem("user");
-        if (userData) {
-            const user = JSON.parse(userData);
+        if (!userData) return;
 
-            console.log("User object from localStorage:", user);
-            console.log("User ID:", user.uid);
+        const user = JSON.parse(userData);
+        setUserId(user.uid);
 
-            setUserId(user.uid);
+        setAvatarLetter(
+            user.fname?.[0]?.toUpperCase() ||
+            user.email?.[0]?.toUpperCase() ||
+            ""
+        );
 
-            if (user.fname && user.fname.length > 0) {
-                setAvatarLetter(user.fname[0].toUpperCase());
-            } else if (user.email && user.email.length > 0) {
-                setAvatarLetter(user.email[0].toUpperCase());
-            }
-
-            if (user.uid) fetchCategories(user.uid);
-        }
+        if (user.uid) fetchCategories(user.uid);
     }, []);
 
-    // Add new category
+    // Add category
     const handleSaveCategory = async () => {
         if (!categoryName.trim() || !userId) return;
 
@@ -54,11 +58,10 @@ const Category = () => {
             cname: categoryName,
             uid: userId,
             color: categoryColor,
-            expenses:[]
+            expenses: []
         };
 
         try {
-            console.log("Sending new category:", newCategory);
             const response = await api.post("/api/category", newCategory);
             setCategories([...categories, response.data]);
             setShowModal(false);
@@ -75,19 +78,16 @@ const Category = () => {
 
         try {
             const response = await api.delete(`/api/category/${cid}`);
-
             if (response.status === 200) {
                 setCategories(categories.filter(cat => cat.cid !== cid));
                 alert("Category deleted successfully!");
-            } else {
-                console.error("Failed to delete category:", response);
             }
         } catch (error) {
             console.error("Error deleting category:", error.response?.data || error.message);
         }
     };
 
-    // Cancel modal
+    // Cancel and close modal
     const handleCancel = () => {
         setShowModal(false);
         setCategoryName("");
@@ -99,9 +99,11 @@ const Category = () => {
             <div className="inner-container">
                 <Navbar avatarLetter={avatarLetter} />
 
-                {/* Main Content */}
+                {/* Main Content Section */}
                 <section className="category-content">
                     <div className="main-content">
+
+                        {/* Header */}
                         <div className="main-content-header">
                             <h2>Manage Categories</h2>
                             <button className="add-category-btn" onClick={() => setShowModal(true)}>
@@ -109,7 +111,7 @@ const Category = () => {
                             </button>
                         </div>
 
-                        {/* Category list */}
+                        {/* Category Cards */}
                         <div className="category-row">
                             {categories.length > 0 ? (
                                 categories.map((cat) => (
@@ -120,11 +122,12 @@ const Category = () => {
                                                     width: "20px",
                                                     height: "20px",
                                                     backgroundColor: cat.color,
-                                                    borderRadius: "4px",
+                                                    borderRadius: "4px"
                                                 }}
                                             ></div>
                                             <div className="category-name">{cat.cname}</div>
                                         </div>
+
                                         <div className="actions">
                                             <i className="fas fa-pencil-alt"></i>
                                             <i
@@ -139,33 +142,32 @@ const Category = () => {
                                 <p>No categories added yet.</p>
                             )}
                         </div>
+
                     </div>
                 </section>
 
-               
+                <Footer />
 
-                {/* Add Category Modal */}
+                {/* Modal */}
                 {showModal && (
                     <div className="modal-overlay">
                         <div className="modal">
                             <h3>Add New Category</h3>
+
                             <input
                                 type="text"
                                 placeholder="Enter category name"
                                 value={categoryName}
                                 onChange={(e) => setCategoryName(e.target.value)}
                             />
+
                             <div className="modal-actions">
                                 <button onClick={handleSaveCategory}>Save</button>
-                                <button onClick={handleCancel} className="cancel-btn">Cancel</button>
+                                <button className="cancel-btn" onClick={handleCancel}>Cancel</button>
                             </div>
                         </div>
                     </div>
                 )}
-
-                <footer className="footer">
-                    � 2025 FinanceTracker. All rights reserved.
-                </footer>
             </div>
         </div>
     );

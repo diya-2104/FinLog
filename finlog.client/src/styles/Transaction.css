@@ -1,432 +1,241 @@
-/* Main Page */
+/* ===========================
+   Page Wrapper
+=========================== */
 .transaction-page {
-    font-family: Arial, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: #333;
-    width: 100%;
     min-height: 100vh;
-    margin: 0;
+    background: var(--bg-page, linear-gradient(135deg, #667eea 0%, #764ba2 100%));
     padding: 10px;
+    width: 100%;
     box-sizing: border-box;
-    overflow-x: auto;
-    overflow-y: auto;
-    font-size: 16px;
 }
 
-    .transaction-page .inner-container {
-        width: 100%;
-        max-width: 100%;
-        box-sizing: border-box;
-        background: white;
-        border-radius: 15px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        min-height: calc(100vh - 20px);
-        color: #333;
-    }
-
-@media (max-width: 768px) {
-    .transaction-page {
-        padding: 5px;
-    }
+/* ===========================
+   Container
+=========================== */
+.inner-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    background: var(--bg-surface, #fff);
+    box-sizing: border-box;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    padding: 20px;
 }
 
-    /* Header */
-    .transaction-page .header {
-        background-color: #111;
-        padding: 20px 16px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        box-shadow: 0 1px 4px rgba(0,0,0,0.6);
-    }
-
-    .transaction-page .logo {
-        display: flex;
-        align-items: center;
-        font-weight: 600;
-        font-size: 18px;
-        color: #fff;
-    }
-
-        .transaction-page .logo i {
-            margin-right: 8px;
-            color: #60A5FA;
-            font-size: 24px;
-        }
-
-.header-actions {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-}
-
-.icon-btn {
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 4px;
-    display: flex;
-    align-items: center;
-}
-
-.notification-icon {
-    width: 28px;
-    height: 25px;
-    stroke: #fff;
-    transition: transform 0.3s ease, stroke 0.3s ease;
-}
-
-    .notification-icon:hover {
-        transform: scale(1.1);
-        stroke: #3b82f6;
-    }
-
-.transaction-page .avatar {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    background-color: #2563eb;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    color: #fff;
-    font-size: 14px;
-}
-
-/* Tabs */
-.transaction-page .tabs {
-    display: flex;
-    gap: 28px;
-    border-bottom: 1px solid #333;
-    margin-bottom: 28px;
-    flex-wrap: wrap;
-    padding: 12px 0;
-}
-
-.transaction-page .tab {
-    padding: 20px 6px;
-    font-size: 16px;
-    color: #aaa;
-    text-decoration: none;
-    border-bottom: 2px solid transparent;
-    transition: 0.3s;
-}
-
-    .transaction-page .tab:hover {
-        color: #fff;
-    }
-
-.transaction-page .active-tab {
-    border-bottom: 3px solid #3b82f6;
-    color: #3b82f6;
-    font-weight: 600;
-}
-
-/* Main Content */
-.transaction-page .main-content {
-    padding: 16px 0 32px;
-}
-
-/* Header inside main content */
-.transaction-page .main-content-header {
+/* ===========================
+   Main Content Header
+=========================== */
+.main-content-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 24px;
-   
-   
+    margin-bottom: 25px;
 }
 
-    .transaction-page .main-content-header h2 {
-        font-size: 22px;
+    .main-content-header h2 {
+        font-size: 24px;
+        margin: 0;
+        color: var(--text-primary, #333);
+    }
+
+/* ===========================
+   Search Bar
+=========================== */
+.filter-container {
+    width: 100%;
+    margin-bottom: 25px;
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+.category-search-input {
+    width: 100%;
+    max-width: 800px;
+    padding: 12px 18px;
+    padding-left: 48px;
+    font-size: 16px;
+    border-radius: 30px;
+    border: 1px solid var(--border-color, #ccc);
+    background: var(--bg-input, #fff);
+    color: var(--text-primary, #333);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+    .category-search-input:focus {
+        border-color: var(--btn-primary-bg, #28a745);
+        box-shadow: 0 4px 10px rgba(40, 167, 69, 0.15);
+    }
+
+    .category-search-input::placeholder {
+        color: var(--text-secondary, #777);
+        font-style: italic;
+    }
+
+/* Search Icon */
+.filter-container::before {
+    content: "\f002";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary, #777);
+    font-size: 16px;
+    pointer-events: none;
+}
+
+/* ===========================
+   Transaction Table
+=========================== */
+.transaction-table-container {
+    width: 100%;
+    background: var(--bg-card, #fff);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 8px var(--card-shadow, rgba(0, 0, 0, 0.1));
+    overflow-x: auto;
+}
+
+.transaction-table {
+    width: 100%;
+    min-width: 700px;
+    border-collapse: collapse;
+}
+
+    .transaction-table th,
+    .transaction-table td {
+        text-align: left;
+        padding: 12px 10px;
+        border-bottom: 1px solid var(--border-color, #e0e0e0);
+        color: var(--text-primary, #333);
+        font-size: 15px;
+    }
+
+    .transaction-table th {
         font-weight: 600;
-        color: #fff;
+        color: var(--text-secondary, #555);
+        background: var(--bg-table-header, #fafafa);
     }
 
-.transaction-page .add-category-btn {
-    padding: 8px 16px;
-    background-color: #3b82f6;
-    border: none;
-    border-radius: 8px;
-    color: #fff;
+    /* Hover Row */
+    .transaction-table tbody tr:hover {
+        background: var(--bg-hover, #f7f7f7);
+    }
+
+/* ===========================
+   Income & Expense Colors
+=========================== */
+.transaction-amount {
     font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.3s;
 }
 
-    .transaction-page .add-category-btn:hover {
-        background-color: #2563eb;
+    .transaction-amount.income {
+        color: var(--success, #28a745);
     }
 
-/* Modal */
+    .transaction-amount.expense {
+        color: var(--danger, #dc3545);
+    }
+
+/* ===========================
+   Ref Info
+=========================== */
+.ref-info {
+    font-size: 12px;
+    color: var(--text-secondary, #777);
+    margin-top: 2px;
+}
+
+/* ===========================
+   Modal
+=========================== */
 .modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.7);
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
     z-index: 1000;
 }
 
 .modal {
-    background-color: #111;
-    padding: 24px;
+    background: var(--bg-surface, #fff);
+    padding: 30px;
     border-radius: 12px;
-    width: 400px;
-    max-width: 90%;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
 }
 
-    .modal h3 {
-        margin-bottom: 16px;
-        font-size: 20px;
-        color: #fff;
+    .modal h2 {
+        margin-bottom: 20px;
+        color: var(--text-primary, #333);
     }
 
-    .modal input {
+    .modal input,
+    .modal select {
         width: 100%;
-        padding: 8px 12px;
-        margin-bottom: 12px;
+        padding: 12px;
+        margin-bottom: 15px;
+        border: 1px solid var(--border-color, #ddd);
         border-radius: 6px;
-        border: 1px solid #333;
-        background-color: #222;
-        color: #fff;
-        font-size: 16px;
-        box-sizing: border-box;
+        font-size: 14px;
+        background: var(--bg-input, #fff);
+        color: var(--text-primary, #333);
     }
-
-        .modal input::placeholder {
-            color: #aaa;
-        }
 
 .modal-actions {
     display: flex;
     justify-content: flex-end;
-    gap: 12px;
+    gap: 10px;
 }
 
-    .modal-actions button {
-        padding: 8px 16px;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        font-weight: 600;
-    }
-
-    .modal-actions .cancel-btn {
-        background-color: #555;
-        color: #fff;
-        transition: background-color 0.3s;
-    }
-
-        .modal-actions .cancel-btn:hover {
-            background-color: #777;
-        }
-
-    .modal-actions button:not(.cancel-btn) {
-        background-color: #3b82f6;
-        color: #fff;
-        transition: background-color 0.3s;
-    }
-
-        .modal-actions button:not(.cancel-btn):hover {
-            background-color: #2563eb;
-        }
-
-/* Transaction Table */
-.transaction-page .transaction-table-container {
-    background-color: #111;
-    border-radius: 12px;
-    padding: 16px;
-    margin-top: 16px;
-    width: 100%;
-    box-sizing: border-box;
-    overflow-x: auto;
+.save-btn {
+    background: var(--btn-primary-bg, #28a745);
+    color: var(--btn-primary-text, #fff);
 }
 
-    .transaction-page .transaction-table-container input[type="search"] {
-        width: 100%;
-        padding: 8px 12px;
-        margin-bottom: 16px;
-        border-radius: 8px;
-        border: 1px solid #333;
-        background-color: #222;
-        color: #fff;
-        font-size: 16px;
-    }
-
-.transaction-page .transaction-table {
-    width: 100%;
-    border-collapse: collapse;
-    min-width: 800px;
+.cancel-btn {
+    background: var(--btn-secondary-bg, #6c757d);
+    color: var(--btn-secondary-text, #fff);
 }
 
-    .transaction-page .transaction-table th,
-    .transaction-page .transaction-table td {
-        text-align: left;
-        padding: 12px 8px;
-        font-size: 16px;
-    }
-
-    .transaction-page .transaction-table th {
-        color: #aaa;
-        border-bottom: 1px solid #333;
-        font-weight: 600;
-    }
-
-    .transaction-page .transaction-table td {
-        border-bottom: 1px solid #222;
-    }
-
-        .transaction-page .transaction-table td .icon {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            margin-right: 8px;
-            font-size: 14px;
-        }
-
-        .transaction-page .transaction-table td .shopping {
-            background-color: #3b82f6;
-        }
-
-        .transaction-page .transaction-table td .income {
-            background-color: #10b981;
-        }
-
-        .transaction-page .transaction-table td .food {
-            background-color: #f59e0b;
-        }
-
-        .transaction-page .transaction-table td .entertainment {
-            background-color: #8b5cf6;
-        }
-
-        .transaction-page .transaction-table td .transportation {
-            background-color: #ef4444;
-        }
-
-.transaction-page .transaction-amount {
-    font-weight: 600;
-}
-
-    .transaction-page .transaction-amount.income {
-        color: #10b981;
-    }
-
-    .transaction-page .transaction-amount.expense {
-        color: #ef4444;
-    }
-
-/* Pagination */
-.transaction-page .pagination {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    margin-top: 16px;
-    gap: 8px;
-}
-
-    .transaction-page .pagination button {
-        padding: 6px 12px;
-        border-radius: 6px;
-        border: none;
-        background-color: #1a1a1a;
-        color: #fff;
-        cursor: pointer;
-        font-weight: 600;
-    }
-
-        .transaction-page .pagination button.active {
-            background-color: #3b82f6;
-            color: #fff;
-        }
-
-/* Floating Add Button */
-.transaction-page .floating-add-btn {
-    position: fixed;
-    bottom: 24px;
-    right: 24px;
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    background-color: #3b82f6;
-    color: #fff;
-    font-size: 32px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.6);
-    transition: background-color 0.3s;
-}
-
-    .transaction-page .floating-add-btn:hover {
-        background-color: #2563eb;
-    }
-.transaction-page .footer {
-    background-color: #111;
-    border-top: 1px solid #333;
-    padding: 20px;
+/* ===========================
+   Footer
+=========================== */
+.footer {
     text-align: center;
-    color: #aaa;
-    font-size: 15px;
-}
-/* Full-width search bar */
-/* Full-width search bar */
-.filter-container {
-    width: 100%;
-    margin: 20px 0;
-    display: flex;
-    justify-content: center;
-    position: relative; /* required for pseudo-element positioning */
-}
-    
-.category-search-input {
-    width: 100%;
-    max-width: 1000px; /* Increased width */
-    padding: 12px 20px;
-    padding-left: 45px; /* Space for the icon */
-    font-size: 16px;
-    border-radius: 30px;
-    border: 1px solid #ccc;
-    outline: none;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    transition: all 0.3s ease;
-    background-color: #222;
-    color: #fff;
+    padding: 20px;
+    background: var(--bg-surface, #f8f9fa);
+    color: var(--text-secondary, #666);
+    border-top: 1px solid var(--border-color, #eee);
+    margin-top: 30px;
 }
 
-
-    .category-search-input:focus {
-        border-color: #3b82f6;
-        box-shadow: 0 4px 12px rgba(59,130,246,0.2);
+/* ===========================
+   Responsive
+=========================== */
+@media (max-width: 768px) {
+    .transaction-table {
+        font-size: 14px;
     }
 
-    .category-search-input::placeholder {
-        color: #999;
-        font-style: italic;
+    .category-search-input {
+        max-width: 100%;
     }
 
-/* FontAwesome search icon inside input */
-.filter-container::before {
-    content: "\f002"; /* FontAwesome search icon code */
-    font-family: "Font Awesome 5 Free";
-    font-weight: 900;
-    position: absolute;
-    left: 20px; /* horizontal position */
-    top: 50%;
-    transform: translateY(-50%);
-    color: #999;
-    pointer-events: none;
-    font-size: 16px;
+    .modal {
+        padding: 20px;
+    }
 }

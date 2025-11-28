@@ -1,22 +1,47 @@
+/* --------------------------------------------------
+   Global Variables
+-------------------------------------------------- */
+:root {
+    --primary: #667eea;
+    --primary-dark: #764ba2;
+    --text-dark: #333;
+    --text-light: #666;
+    --bg-light: #f8f9fa;
+    --border-color: #e0e0e0;
+    --radius: 12px;
+    --transition: 0.25s ease;
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
+    --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.18);
+}
+
+/* --------------------------------------------------
+   Base Page Container
+-------------------------------------------------- */
+/* Fullscreen gradient */
 .account-page {
     min-height: 100vh;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    padding: 10px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    padding: 10px; /* remove outer spacing */
+    margin: 0; /* ensure no outer margin */
     width: 100%;
     box-sizing: border-box;
 }
 
+/* Make inner container full-width and flush */
 .inner-container {
     width: 100%;
     max-width: 100%;
     margin: 0;
-    background: white;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    min-height: calc(100vh - 20px);
+    border-radius: 20pt !important; /* remove the curved edges */
+    box-shadow: none !important; /* remove shadow */
+    background: white; /* keep content white */
 }
 
+
+/* --------------------------------------------------
+   Header
+-------------------------------------------------- */
 .account-page .header {
     display: flex;
     justify-content: space-between;
@@ -31,76 +56,83 @@
     align-items: center;
     gap: 10px;
     font-size: 24px;
-    font-weight: bold;
-    color: #333;
+    font-weight: 700;
+    color: var(--text-dark);
 }
 
-.account-page .header-actions {
+.header-actions {
     display: flex;
     align-items: center;
     gap: 15px;
 }
 
-.account-page .icon-btn {
+.icon-btn {
     background: none;
     border: none;
     cursor: pointer;
     padding: 8px;
     border-radius: 50%;
-    transition: background-color 0.2s;
+    transition: background-color var(--transition), transform var(--transition);
 }
 
-.account-page .icon-btn:hover {
-    background-color: #f5f5f5;
+    .icon-btn:hover {
+        background-color: #f2f2f2;
+        transform: scale(1.05);
+    }
+
+.notification-icon {
+    width: 22px;
+    height: 22px;
+    color: var(--text-light);
 }
 
-.account-page .notification-icon {
-    width: 20px;
-    height: 20px;
-    color: #666;
-}
-
-.account-page .avatar {
-    width: 40px;
-    height: 40px;
+.avatar {
+    width: 42px;
+    height: 42px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
-    font-weight: bold;
+    font-weight: 600;
     font-size: 16px;
 }
 
-.account-page .tabs {
+/* --------------------------------------------------
+   Tabs
+-------------------------------------------------- */
+.tabs {
     display: flex;
-    background: #f8f9fa;
+    background: var(--bg-light);
     border-bottom: 1px solid #eee;
 }
 
-.account-page .tab {
+.tab {
     padding: 15px 25px;
+    color: var(--text-light);
     text-decoration: none;
-    color: #666;
     border-bottom: 3px solid transparent;
-    transition: all 0.2s;
+    transition: var(--transition);
+    font-weight: 500;
 }
 
-.account-page .tab:hover {
-    background: #e9ecef;
-    color: #333;
-}
+    .tab:hover {
+        background: #eceff3;
+        color: var(--text-dark);
+    }
 
-.account-page .active-tab {
-    color: #667eea;
-    border-bottom-color: #667eea;
+.active-tab {
+    color: var(--primary);
+    border-bottom-color: var(--primary);
     background: white;
 }
 
+/* --------------------------------------------------
+   Content Area
+-------------------------------------------------- */
 .account-content {
-    padding: 20px;
-    width: 100%;
+    padding: 25px;
     box-sizing: border-box;
 }
 
@@ -110,6 +142,9 @@
     }
 }
 
+/* --------------------------------------------------
+   Main Section Header
+-------------------------------------------------- */
 .main-content-header {
     display: flex;
     justify-content: space-between;
@@ -117,53 +152,56 @@
     margin-bottom: 30px;
 }
 
-.main-content-header h2 {
-    color: #333;
-    margin: 0;
-}
+    .main-content-header h2 {
+        margin: 0;
+        color: var(--text-dark);
+        font-weight: 600;
+    }
 
 .add-account-btn {
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    color: white;
-    border: none;
     padding: 12px 24px;
-    border-radius: 8px;
+    border: none;
+    border-radius: var(--radius);
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
     cursor: pointer;
-    font-weight: 500;
-    transition: transform 0.2s;
+    font-weight: 600;
+    transition: var(--transition);
 }
 
-.add-account-btn:hover {
-    transform: translateY(-2px);
-}
+    .add-account-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-sm);
+    }
 
+/* --------------------------------------------------
+   Account Cards
+-------------------------------------------------- */
 .account-row {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 20px;
-    width: 100%;
 }
 
 @media (max-width: 768px) {
     .account-row {
-        grid-template-columns: 1fr;
         gap: 15px;
     }
 }
 
 .account-card {
     background: white;
-    border: 1px solid #e0e0e0;
-    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
     padding: 20px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
 }
 
-.account-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-}
+    .account-card:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-md);
+    }
 
 .card-header {
     margin-bottom: 15px;
@@ -171,21 +209,21 @@
 
 .account-name {
     font-size: 18px;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 5px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 4px;
 }
 
 .account-type {
-    color: #666;
     font-size: 14px;
+    color: var(--text-light);
 }
 
 .account-balance {
-    font-size: 16px;
-    color: #28a745;
+    margin: 15px 0;
+    font-size: 17px;
     font-weight: 600;
-    margin-bottom: 15px;
+    color: #28a745;
 }
 
 .actions {
@@ -193,89 +231,80 @@
     gap: 15px;
 }
 
-.actions i {
-    color: #666;
-    cursor: pointer;
-    padding: 5px;
-    border-radius: 4px;
-    transition: all 0.2s;
-}
+    .actions i {
+        padding: 6px;
+        border-radius: 6px;
+        cursor: pointer;
+        color: var(--text-light);
+        transition: var(--transition);
+    }
 
-.actions i:hover {
-    background: #f5f5f5;
-    color: #333;
-}
+        .actions i:hover {
+            background: #f4f4f4;
+            color: var(--text-dark);
+        }
 
 .fa-trash-alt:hover {
     color: #dc3545 !important;
 }
 
-.account-page .modal-overlay {
+/* --------------------------------------------------
+   Modal
+-------------------------------------------------- */
+.modal-overlay {
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1000;
+    z-index: 999;
 }
 
-.account-page .modal {
+.modal {
     background: white;
     padding: 30px;
-    border-radius: 12px;
+    border-radius: var(--radius);
     width: 90%;
-    max-width: 400px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    max-width: 420px;
+    box-shadow: var(--shadow-lg);
 }
 
-.account-page .modal h3 {
-    margin: 0 0 20px 0;
-    color: #333;
-}
+    .modal h3 {
+        margin-bottom: 20px;
+        color: var(--text-dark);
+    }
 
-.account-page .modal input {
-    width: 100%;
-    padding: 12px;
-    margin-bottom: 15px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    font-size: 14px;
-    box-sizing: border-box;
-}
+    .modal input {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-size: 15px;
+    }
 
-.account-page .modal-actions {
+.modal-actions {
     display: flex;
-    gap: 10px;
     justify-content: flex-end;
-    margin-top: 20px;
+    gap: 10px;
+    margin-top: 15px;
 }
 
-.account-page .modal-actions button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 500;
-}
+    .modal-actions button {
+        padding: 10px 20px;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        font-weight: 500;
+    }
 
-.account-page .modal-actions button:first-child {
-    background: #667eea;
-    color: white;
-}
+        .modal-actions button:first-child {
+            background: var(--primary);
+            color: white;
+        }
 
-.account-page .cancel-btn {
+.cancel-btn {
     background: #6c757d;
     color: white;
-}
-
-.account-page .footer {
-    text-align: center;
-    padding: 20px;
-    background: #f8f9fa;
-    color: #666;
-    border-top: 1px solid #eee;
 }

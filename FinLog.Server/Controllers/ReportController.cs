@@ -22,7 +22,8 @@ namespace FinLog.Server.Controllers
         public async Task<IActionResult> GetDailySpending(int uid)
         {
             var data = await _context.Transactions
-                .Where(t => t.uid == uid && t.ttype == "expense")
+                .Where(t => t.uid == uid && t.ttype == "expense" && 
+                           _context.Accounts.Any(a => a.account_id == t.account_id && a.uid == uid))
                 .GroupBy(t => t.created_at.DayOfWeek)
                 .Select(g => new {
                     day = g.Key.ToString(),
@@ -34,25 +35,26 @@ namespace FinLog.Server.Controllers
         }
 
         [HttpGet("category-summary/{uid}")]
-        //public async Task<IActionResult> GetCategorySummary(int uid)
-        //{
-        //    var data = await _context.Transactions
-        //        .Where(t => t.uid == uid && t.ttype == "expense")
-        //        .GroupBy(t => t.cid)
-        //        .Select(g => new {
-        //            category = _context.Categories.First(c => c.cid == g.Key).cname,
-        //            total = g.Sum(x => x.tamount)
-        //        })
-        //        .ToListAsync();
+        public async Task<IActionResult> GetCategorySummary(int uid)
+        {
+            var data = await _context.Expenses
+                .Where(e => e.uid == uid && _context.Accounts.Any(a => a.account_id == e.account_id && a.uid == uid))
+                .Include(e => e.Category)
+                .GroupBy(e => e.Category.cname)
+                .Select(g => new {
+                    category = g.Key,
+                    total = g.Sum(x => x.eamount)
+                })
+                .ToListAsync();
 
-        //    return Ok(data);
-        //}
+            return Ok(data);
+        }
 
         [HttpGet("income-expense/{uid}")]
         public async Task<IActionResult> GetIncomeVsExpense(int uid)
         {
             var data = await _context.Transactions
-                .Where(t => t.uid == uid)
+                .Where(t => t.uid == uid && _context.Accounts.Any(a => a.account_id == t.account_id && a.uid == uid))
                 .GroupBy(t => t.created_at.Month)
                 .Select(g => new {
                     month = g.Key,
@@ -69,7 +71,8 @@ namespace FinLog.Server.Controllers
         public async Task<IActionResult> GetMonthlyTrend(int uid)
         {
             var data = await _context.Transactions
-                .Where(t => t.uid == uid && t.ttype == "expense")
+                .Where(t => t.uid == uid && t.ttype == "expense" && 
+                           _context.Accounts.Any(a => a.account_id == t.account_id && a.uid == uid))
                 .GroupBy(t => t.created_at.Month)
                 .Select(g => new {
                     month = g.Key,

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/api";
 import Navbar from "./Navbar";
+import Footer from "./Footer";
 import "../styles/Account.css";
 
 const Account = () => {
@@ -127,9 +128,7 @@ const Account = () => {
                     </div>
                 )}
 
-                <footer className="footer">
-                    © 2025 FinanceTracker. All rights reserved.
-                </footer>
+                <Footer />
             </div>
         </div>
     );

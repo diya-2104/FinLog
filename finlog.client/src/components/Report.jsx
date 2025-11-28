@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Chart from "chart.js/auto";
 import api from "../api/api";
 import Navbar from "./Navbar";
+import Footer from "./Footer";
 import "../styles/Report.css";
 
 const Report = () => {
@@ -211,9 +212,7 @@ const Report = () => {
                     </div>
                 </div>
 
-                <footer className="footer">
-                    � 2025 FinanceTracker. All rights reserved.
-                </footer>
+                <Footer />
             </div>
         </div>
     );

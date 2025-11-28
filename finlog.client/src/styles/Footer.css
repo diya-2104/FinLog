@@ -1,27 +1,120 @@
 .footer {
-    background: #0D1117;
+    background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
     border-top: 1px solid #374151;
-    padding: 24px;
-    text-align: center;
-    color: #9CA3AF;
+    padding: 40px 20px 20px;
+    margin-top: auto;
+    color: #d1d5db;
 }
 
-    .footer .links a {
-        margin: 0 12px;
-        color: #9CA3AF;
-        transition: color 0.3s;
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 24px;
+    font-weight: 700;
+    color: blue
+}
+
+.brand i {
+    color: #60a5fa;
+    font-size: 28px;
+}
+
+.links {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.links a {
+    color: #9ca3af;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+    position: relative;
+}
+
+.links a:hover {
+    color: #60a5fa;
+}
+
+.links a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -4px;
+    left: 0;
+    background-color: #60a5fa;
+    transition: width 0.3s ease;
+}
+
+.links a:hover::after {
+    width: 100%;
+}
+
+.social {
+    display: flex;
+    gap: 15px;
+}
+
+.social a {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #374151;
+    color: #9ca3af;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-size: 16px;
+}
+
+.social a:hover {
+    background: #60a5fa;
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+.footer-copy {
+    max-width: 1200px;
+    margin: 30px auto 0;
+    padding-top: 20px;
+    border-top: 1px solid #374151;
+    text-align: center;
+}
+
+.footer-copy p {
+    margin: 0;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+@media (max-width: 768px) {
+    .footer-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 20px;
     }
-
-        .footer .links a:hover {
-            color: white;
-        }
-
-    .footer .social a {
-        margin: 0 8px;
-        color: #9CA3AF;
-        transition: color 0.3s;
+    
+    .links {
+        justify-content: center;
+        gap: 20px;
     }
-
-        .footer .social a:hover {
-            color: white;
-        }
+    
+    .social {
+        justify-content: center;
+    }
+}

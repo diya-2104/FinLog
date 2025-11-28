@@ -2,6 +2,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import feather from "feather-icons";
 import api from "../api/api";
+import Footer from "./Footer";
 import "./../styles/Profile.css";
 
 const Profile = () => {
@@ -80,7 +81,7 @@ const Profile = () => {
             <div className="inner-container">
 
                 <header className="header">
-                    <div className="logo"><i className="fas fa-chart-line"></i>FinTrack</div>
+                    <div className="logo"><i className="fas fa-chart-line"></i>FinLog</div>
                 </header>
 
                 <div className="profile-card">
@@ -122,11 +123,11 @@ const Profile = () => {
                             />
                         </div>
 
-                        <div className="profile-info">
-                            <h1>{`${user.fname} ${user.lname}`}</h1>
-                            <p className="role">Financial Analyst</p>
-                            <p className="location"><i data-feather="map-pin"></i> San Francisco, CA</p>
-                        </div>
+                        {/*<div className="profile-info">*/}
+                        {/*    <h1>{`${user.fname} ${user.lname}`}</h1>*/}
+                        {/*    <p className="role">Financial Analyst</p>*/}
+                        {/*    <p className="location"><i data-feather="map-pin"></i> San Francisco, CA</p>*/}
+                        {/*</div>*/}
                     </div>
 
                    
@@ -142,10 +143,10 @@ const Profile = () => {
                                 <p className="label">Last Name</p>
                                 <p>{user.lname}</p>
                             </div>
-                            <div className="info-item">
-                                <p className="label">Date of Birth</p>
-                                <p>May 15, 2005</p>
-                            </div>
+                            {/*<div className="info-item">*/}
+                            {/*    <p className="label">Date of Birth</p>*/}
+                            {/*    <p>May 15, 2005</p>*/}
+                            {/*</div>*/}
                         </div>
 
                         <div className="info-box">
@@ -155,10 +156,10 @@ const Profile = () => {
                                 <p className="label">Email Address</p>
                                 <p>{user.email}</p>
                             </div>
-                            <div className="info-item">
-                                <p className="label">Phone Number</p>
-                                <p>(+91) 901-6578-040</p>
-                            </div>
+                            {/*<div className="info-item">*/}
+                            {/*    <p className="label">Phone Number</p>*/}
+                            {/*    <p>(+91) 901-6578-040</p>*/}
+                            {/*</div>*/}
 
                         </div>
                     </div>
@@ -169,9 +170,7 @@ const Profile = () => {
 
                     {error && <p className="error-text">{error}</p>}
 
-                    <footer className="footer">
-                        © 2025 FinanceTracker. All rights reserved.
-                    </footer>
+                    <Footer />
                 </div>
             </div>
         </div>

@@ -1,3 +1,29 @@
+﻿/* 🌗 GLOBAL THEME VARIABLES */
+:root {
+    --bg-body: #f5f7fb;
+    --bg-surface: #ffffff;
+    --text-main: #1a1a1a;
+    --border-color: #e5e5e5;
+    --card-shadow: rgba(0, 0, 0, 0.08);
+    --accent: #667eea;
+}
+
+/* 🌙 DARK MODE OVERRIDES */
+.dark-mode {
+    --bg-body: #181a1f;
+    --bg-surface: #1f2124;
+    --text-main: #f7f7f7;
+    --border-color: #333;
+    --card-shadow: rgba(0, 0, 0, 0.5);
+    --accent: #a78bfa;
+}
+
+/* Apply background to entire page */
+body {
+    background: var(--bg-body);
+    color: var(--text-main);
+    transition: background 0.3s ease, color 0.3s ease;
+}
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;

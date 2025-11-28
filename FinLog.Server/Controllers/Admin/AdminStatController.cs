@@ -29,15 +29,18 @@ namespace FinLog.Server.Controllers.Admin
                 
                 var totalUsers = allUsers.Count;
                 var verifiedUsers = allUsers.Count(u => u.IsEmailVerified);
-                
+                var unverifiedUsers = totalUsers - verifiedUsers;
+                var activeUsers = (int)(totalUsers * 0.6);
+
+
                 Console.WriteLine($"Total Users: {totalUsers}, Verified: {verifiedUsers}");
                 
                 var stats = new
                 {
                     TotalUsers = totalUsers,
                     VerifiedUsers = verifiedUsers,
-                    UnverifiedUsers = totalUsers - verifiedUsers,
-                    ActiveUsers = (int)(totalUsers * 0.6)
+                    UnverifiedUsers = unverifiedUsers,
+                    ActiveUsers = activeUsers
                 };
 
                 return Ok(stats);

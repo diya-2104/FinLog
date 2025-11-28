@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/api";
 import Navbar from "./Navbar";
+import Footer from "./Footer";
 import "../styles/Income.css";
 
 const Income = () => {
@@ -112,6 +113,7 @@ const Income = () => {
             const updated = [newIncome, ...incomes];
             setIncomes(updated);
             updateTotals(updated);
+            alert("Income added successfully!");
             closeModal();
         } catch (err) {
             console.error("Error saving income:", err.response?.data || err.message);
@@ -197,16 +199,16 @@ const Income = () => {
                 <Navbar avatarLetter={avatarLetter} />
 
                 {/* Cards */}
-                <div className="cards">
-                    <div className="finance-card">
-                        <p>Total Income</p>
+                <div className="income-row">
+                    <div className="income-card">
+                        <p >Total Income</p>
                         <h3>₹{isNaN(totalIncome) ? "0.00" : totalIncome.toFixed(2)}</h3>
                     </div>
-                    <div className="finance-card">
+                    <div className="income-card">
                         <p>Income Entries</p>
                         <h3>{incomes.length}</h3>
                     </div>
-                    <div className="finance-card">
+                    <div className="income-card">
                         <p>Average Income</p>
                         <h3>₹{incomes.length > 0 ? (totalIncome / incomes.length).toFixed(2) : "0.00"}</h3>
                     </div>
@@ -278,7 +280,7 @@ const Income = () => {
                         </tbody>
                     </table>
                 </div>
-
+                <Footer />
             </div>
 
             {/* Modal for Add/Edit */}
@@ -324,9 +326,6 @@ const Income = () => {
                     </div>
                 </div>
             )}
-            <footer className="footer">
-                � 2025 FinanceTracker. All rights reserved.
-            </footer>
         </div>
     );
 };

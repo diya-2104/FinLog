@@ -1,3 +1,4 @@
+/*@import url('navbar.css');*/
 .navbar-header {
     display: flex;
     justify-content: space-between;
@@ -14,6 +15,11 @@
     font-size: 24px;
     font-weight: bold;
     color: #333;
+}
+.navbar-logo i {
+    margin-right : 8px;
+    color: #60a5fa;
+    font-size:24px;
 }
 
 .navbar-actions {
@@ -77,4 +83,48 @@
     color: #667eea;
     border-bottom-color: #667eea;
     background: white;
+}
+
+.inner-container.dark-mode {
+    background: #1a1a1a !important;
+    color: #ffffff !important;
+}
+
+    .inner-container.dark-mode .navbar-header {
+        /*        background: #2d2d2d !important;*/
+        background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+        border-bottom-color: #444 !important;
+    }
+
+.inner-container.dark-mode .navbar-logo {
+    color: #ffffff !important;
+}
+
+.inner-container.dark-mode .navbar-tabs {
+    background: #2d2d2d !important;
+    border-bottom-color: #444 !important;
+}
+
+.inner-container.dark-mode .navbar-tab {
+    color: #cccccc !important;
+}
+
+.inner-container.dark-mode .navbar-tab:hover {
+    background: #3d3d3d !important;
+    color: #ffffff !important;
+}
+
+.inner-container.dark-mode .navbar-active-tab {
+    background: #1a1a1a !important;
+    color: #667eea !important;
+}
+
+.inner-container .footer {
+    background: #f8f9fa !important;
+    color: #333 !important;
+}
+
+.inner-container.dark-mode .footer {
+    background: linear-gradient(135deg, #1f2937 0%, #111827 100%) !important;
+    color: #d1d5db !important;
 }
