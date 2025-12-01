@@ -6,6 +6,9 @@ import "../styles/Report.css";
 
 const Report = () => {
     const [avatarLetter, setAvatarLetter] = useState("");
+    const [isLightMode, setIsLightMode] = useState(false);
+    const [uid, setUid] = useState(null);
+
     const navigate = useNavigate();
 
     // Canvas Refs
@@ -14,41 +17,48 @@ const Report = () => {
     const incomeExpenseRef = useRef(null);
     const monthlyRef = useRef(null);
 
-    // Chart instances storage
+    // Chart storage
     const chartInstances = useRef([]);
 
-    const [uid, setUid] = useState(null);
-
-    // Fetch User ID
+    // Load user from localStorage
     useEffect(() => {
         const data = localStorage.getItem("user");
         if (!data) return;
+
         const u = JSON.parse(data);
         setAvatarLetter(u.fname ? u.fname[0].toUpperCase() : u.email[0].toUpperCase());
         setUid(u.uid);
     }, []);
 
-    // Convert month number ? name
+    // Month names
     const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
+    // Destroy charts before creating new ones
+    const destroyCharts = () => {
+        chartInstances.current.forEach((chart) => chart.destroy());
+        chartInstances.current = [];
+    };
+
+    // Theme toggle handler
+    const toggleTheme = () => {
+        const page = document.querySelector(".report-page");
+        page.classList.toggle("light-mode");
+        setIsLightMode((prev) => !prev);
+    };
+
+    // Load Charts
     useEffect(() => {
         if (!uid) return;
 
-        // DESTROY OLD CHARTS
-        chartInstances.current.forEach((chart) => chart.destroy());
-        chartInstances.current = [];
+        destroyCharts();
 
-        // -----------------------------
-        // 1. DAILY SPENDING API
-        // -----------------------------
+        const textColor = isLightMode ? "#111" : "#fff";
+        const gridColor = isLightMode ? "#bbb" : "#555";
+
+        // 1. Daily Spending
         api.get(`/api/Report/daily-spending/${uid}`).then((res) => {
-            const labels = [];
-            const totals = [];
-
-            res.data.forEach((d) => {
-                labels.push(d.day);
-                totals.push(d.total);
-            });
+            const labels = res.data.map((d) => d.day);
+            const totals = res.data.map((d) => d.total);
 
             chartInstances.current.push(
                 new Chart(spendingRef.current, {
@@ -59,27 +69,25 @@ const Report = () => {
                             {
                                 label: "Daily Spending",
                                 data: totals,
-                                fill: true,
                                 borderColor: "#60A5FA",
                                 backgroundColor: "rgba(96,165,250,0.25)",
+                                fill: true,
                                 tension: 0.4,
                             },
                         ],
                     },
                     options: {
-                        plugins: { legend: { labels: { color: "#fff" } } },
+                        plugins: { legend: { labels: { color: textColor } } },
                         scales: {
-                            x: { ticks: { color: "#ccc" } },
-                            y: { ticks: { color: "#ccc" } },
+                            x: { ticks: { color: textColor }, grid: { color: gridColor } },
+                            y: { ticks: { color: textColor }, grid: { color: gridColor } },
                         },
                     },
                 })
             );
         });
 
-        // -----------------------------
-        // 2. CATEGORY SUMMARY API
-        // -----------------------------
+        // 2. Category Summary
         api.get(`/api/Report/category-summary/${uid}`).then((res) => {
             chartInstances.current.push(
                 new Chart(categoryRef.current, {
@@ -101,15 +109,13 @@ const Report = () => {
                         ],
                     },
                     options: {
-                        plugins: { legend: { labels: { color: "#fff" } } },
+                        plugins: { legend: { labels: { color: textColor } } },
                     },
                 })
             );
         });
 
-        // -----------------------------
-        // 3. INCOME VS EXPENSE API
-        // -----------------------------
+        // 3. Income vs Expense
         api.get(`/api/Report/income-expense/${uid}`).then((res) => {
             const labels = res.data.map((x) => monthNames[x.month - 1]);
             const income = res.data.map((x) => x.income);
@@ -121,32 +127,22 @@ const Report = () => {
                     data: {
                         labels,
                         datasets: [
-                            {
-                                label: "Income",
-                                data: income,
-                                backgroundColor: "#34D399",
-                            },
-                            {
-                                label: "Expense",
-                                data: expense,
-                                backgroundColor: "#F87171",
-                            },
+                            { label: "Income", data: income, backgroundColor: "#34D399" },
+                            { label: "Expense", data: expense, backgroundColor: "#F87171" },
                         ],
                     },
                     options: {
-                        plugins: { legend: { labels: { color: "#fff" } } },
+                        plugins: { legend: { labels: { color: textColor } } },
                         scales: {
-                            x: { ticks: { color: "#ccc" } },
-                            y: { ticks: { color: "#ccc" } },
+                            x: { ticks: { color: textColor }, grid: { color: gridColor } },
+                            y: { ticks: { color: textColor }, grid: { color: gridColor } },
                         },
                     },
                 })
             );
         });
 
-        // -----------------------------
-        // 4. MONTHLY TREND API
-        // -----------------------------
+        // 4. Monthly Trend
         api.get(`/api/Report/monthly-trend/${uid}`).then((res) => {
             const labels = res.data.map((x) => monthNames[x.month - 1]);
             const totals = res.data.map((x) => x.total);
@@ -167,48 +163,45 @@ const Report = () => {
                         ],
                     },
                     options: {
-                        plugins: { legend: { labels: { color: "#fff" } } },
+                        plugins: { legend: { labels: { color: textColor } } },
                         scales: {
-                            x: { ticks: { color: "#ccc" } },
-                            y: { ticks: { color: "#ccc" } },
+                            x: { ticks: { color: textColor }, grid: { color: gridColor } },
+                            y: { ticks: { color: textColor }, grid: { color: gridColor } },
                         },
                     },
                 })
             );
         });
 
-        return () => {
-            chartInstances.current.forEach((chart) => chart.destroy());
-        };
-    }, [uid]);
+        return () => destroyCharts();
+    }, [uid, isLightMode]);
 
     return (
         <div className="report-page">
             <div className="inner-container">
+
                 {/* Header */}
                 <header className="header">
                     <div className="logo">
-                        <i className="fas fa-chart-line"></i>FinTrack
+                        <i className="fas fa-chart-line"></i> FinLog
                     </div>
+
                     <div className="header-actions">
-                        <button className="icon-btn">
-                            <svg
-                                className="notification-icon"
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                            >
-                                <path d="M12 22c1.1 0 2-.9 2-2H10c0 1.1.9 2 2 2z" />
-                                <path d="M18 16v-5c0-3.31-2.69-6-6-6s-6 2.69-6 6v5l-2 2v1h16v-1l-2-2z" />
-                            </svg>
+                        <button className="theme-toggle-btn" onClick={toggleTheme}>
+                            {isLightMode ? (
+                                <svg xmlns="http://www.w3.org/2000/svg" stroke="#facc15" fill="none" strokeWidth="2" viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="5" />
+                                    <line x1="12" y1="1" x2="12" y2="3" />
+                                    <line x1="12" y1="21" x2="12" y2="23" />
+                                </svg>
+                            ) : (
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="#fef3c7" stroke="#fef3c7" strokeWidth="2" viewBox="0 0 24 24">
+                                    <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z" />
+                                </svg>
+                            )}
                         </button>
-                        <div
-                            className="avatar"
-                            onClick={() => navigate("/profile")}
-                            style={{ cursor: "pointer" }}
-                        >
+
+                        <div className="avatar" onClick={() => navigate("/profile")}>
                             {avatarLetter}
                         </div>
                     </div>
@@ -216,12 +209,12 @@ const Report = () => {
 
                 {/* Tabs */}
                 <nav className="tabs">
-                    <NavLink to="/income" className={({ isActive }) => isActive ? "tab active-tab" : "tab"}>Income</NavLink>
-                    <NavLink to="/expense" className={({ isActive }) => isActive ? "tab active-tab" : "tab"}>Expense</NavLink>
-                    <NavLink to="/category" className={({ isActive }) => isActive ? "tab active-tab" : "tab"}>Category</NavLink>
-                    <NavLink to="/account" className={({ isActive }) => isActive ? "tab active-tab" : "tab"}>Account</NavLink>
-                    <NavLink to="/transaction" className={({ isActive }) => isActive ? "tab active-tab" : "tab"}>Transaction</NavLink>
-                    <NavLink to="/report" className={({ isActive }) => isActive ? "tab active-tab" : "tab"}>Reports</NavLink>
+                    <NavLink to="/income" className={({ isActive }) => (isActive ? "tab active-tab" : "tab")}>Income</NavLink>
+                    <NavLink to="/expense" className={({ isActive }) => (isActive ? "tab active-tab" : "tab")}>Expense</NavLink>
+                    <NavLink to="/category" className={({ isActive }) => (isActive ? "tab active-tab" : "tab")}>Category</NavLink>
+                    <NavLink to="/account" className={({ isActive }) => (isActive ? "tab active-tab" : "tab")}>Account</NavLink>
+                    <NavLink to="/transaction" className={({ isActive }) => (isActive ? "tab active-tab" : "tab")}>Transaction</NavLink>
+                    <NavLink to="/report" className={({ isActive }) => (isActive ? "tab active-tab" : "tab")}>Reports</NavLink>
                 </nav>
 
                 {/* Charts */}
@@ -250,6 +243,7 @@ const Report = () => {
                 <footer className="footer">
                     © 2025 FinanceTracker. All rights reserved.
                 </footer>
+
             </div>
         </div>
     );

@@ -1,8 +1,27 @@
-/* Main Page */
+/* ============================================
+   EXPENSE PAGE – THEME VARIABLES (SCOPED)
+   ============================================ */
+
+/* ?? Default Dark Mode (Only inside expense page) */
 .expense-page {
+    --page-bg: #000;
+    --container-bg: #111;
+    --card-bg: #1f1f1f;
+    --input-bg: #111;
+    --table-bg: #1f1f1f;
+    --footer-bg: #111;
+    --text-primary: #fff;
+    --text-secondary: #aaa;
+    --heading-red: #ef4444; /* expense red */
+    --border-color: #333;
+    --btn-primary-bg: #dc2626;
+    --btn-primary-bg-hover: #b91c1c;
+    --btn-secondary-bg: #444;
+    --btn-secondary-hover: #666;
+    --success: #22c55e;
+    background-color: var(--page-bg);
+    color: var(--text-primary);
     font-family: Arial, sans-serif;
-    background-color: #000;
-    color: #fff;
     width: 100vw;
     height: 100vh;
     margin: 0;
@@ -16,19 +35,39 @@
     left: 0;
 }
 
+    /* ?? Light Mode */
+    .expense-page.light-mode {
+        --page-bg: #f5f7fa;
+        --container-bg: #ffffff;
+        --card-bg: #ffffff;
+        --input-bg: #ffffff;
+        --table-bg: #ffffff;
+        --footer-bg: #f0f0f0;
+        --text-primary: #111;
+        --text-secondary: #555;
+        --heading-red: #b91c1c;
+        --border-color: #e6e6e6;
+        --btn-primary-bg: #dc2626;
+        --btn-primary-bg-hover: #b91c1c;
+        --btn-secondary-bg: #ddd;
+        --btn-secondary-hover: #ccc;
+        --success: #15803d;
+    }
+
     .expense-page .inner-container {
         min-width: 1200px;
         box-sizing: border-box;
     }
 
-    /* Header */
+    /* ================= HEADER ================= */
     .expense-page .header {
-        background-color: #111;
+        background-color: var(--container-bg);
         padding: 20px 16px;
         display: flex;
         justify-content: space-between;
         align-items: center;
         box-shadow: 0 1px 4px rgba(0,0,0,0.6);
+        box-sizing: border-box;
     }
 
     .expense-page .logo {
@@ -36,295 +75,286 @@
         align-items: center;
         font-weight: 600;
         font-size: 18px;
-        color: #fff;
+        color: var(--text-primary);
     }
 
         .expense-page .logo i {
             margin-right: 8px;
-            color: #60A5FA; /* red accent */
+            color: var(--heading-red);
             font-size: 24px;
         }
 
+    /* ================= HEADER ACTIONS ================= */
     .expense-page .header-actions {
         display: flex;
         align-items: center;
-        gap: 16px;
+        gap: 10px;
     }
 
-.icon-btn {
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 4px;
-    display: flex;
-    align-items: center;
-}
-
-.notification-icon {
-    width: 28px;
-    height: 25px;
-    stroke: #fff;
-    transition: transform 0.3s ease, stroke 0.3s ease;
-}
-
-    .notification-icon:hover {
-        transform: scale(1.1);
-        stroke: #ef4444; /* red hover */
+    /* ================= THEME TOGGLE BUTTON ================= */
+    .expense-page .theme-toggle-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: var(--btn-secondary-bg);
+        cursor: pointer;
+        border: none;
+        transition: background 0.3s ease;
+        padding: 4px;
+        box-sizing: border-box;
     }
 
-.expense-page .avatar {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    background-color: #2563eb; /* red */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    color: #fff;
-    font-size: 14px;
-}
+        .expense-page .theme-toggle-btn svg {
+            width: 70%;
+            height: 70%;
+        }
 
-/* Tabs */
-.expense-page .tabs {
-    display: flex;
-    gap: 28px;
-    border-bottom: 1px solid #333;
-    margin-bottom: 28px;
-    flex-wrap: wrap;
-    padding: 12px 0;
-}
+        .expense-page .theme-toggle-btn:hover {
+            background: var(--btn-secondary-hover);
+        }
 
-.expense-page .tab {
-    padding: 20px 6px;
-    font-size: 16px;
-    color: #aaa;
-    text-decoration: none;
-    border-bottom: 2px solid transparent;
-    transition: 0.3s;
-}
-
-    .expense-page .tab:hover {
+    /* ================= AVATAR ================= */
+    .expense-page .avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: #2563eb; /* blue avatar */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
         color: #fff;
+        font-size: 18px;
+        text-transform: uppercase;
+        cursor: pointer;
+        flex-shrink: 0;
     }
 
-.expense-page .active-tab {
-    border-bottom: 3px solid #ef4444; /* red */
-    color: #ef4444;
-    font-weight: 600;
-}
-
-/* Cards */
-.expense-page .cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 28px;
-    margin-bottom: 36px;
-}
-
-.expense-page .finance-card {
-    background-color: #1f1f1f;
-    border-radius: 10px;
-    padding: 28px;
-    box-shadow: 0 1px 6px rgba(0,0,0,0.4);
-    min-width: 280px;
-    transition: all 0.3s ease;
-}
-
-    .expense-page .finance-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+    /* ================= TABS ================= */
+    .expense-page .tabs {
+        display: flex;
+        gap: 28px;
+        border-bottom: 1px solid var(--border-color);
+        margin-bottom: 28px;
+        flex-wrap: wrap;
+        padding: 12px 0;
     }
 
-    .expense-page .finance-card h3 {
+    .expense-page .tab {
+        padding: 20px 6px;
+        font-size: 16px;
+        color: var(--text-secondary);
+        text-decoration: none;
+        border-bottom: 2px solid transparent;
+        transition: 0.3s;
+    }
+
+        .expense-page .tab:hover {
+            color: var(--text-primary);
+        }
+
+    .expense-page .active-tab {
+        border-bottom: 3px solid var(--heading-red);
+        color: var(--heading-red);
+        font-weight: 600;
+    }
+
+    /* ================= CARDS ================= */
+    .expense-page .cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 28px;
+        margin-bottom: 36px;
+    }
+
+    .expense-page .finance-card {
+        background-color: var(--card-bg);
+        border-radius: 10px;
+        padding: 28px;
+        box-shadow: 0 1px 6px rgba(0,0,0,0.4);
+        min-width: 280px;
+        transition: all 0.3s ease;
+    }
+
+        .expense-page .finance-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+        }
+
+        .expense-page .finance-card h3 {
+            color: var(--text-primary);
+            font-size: 24px;
+            margin-top: 10px;
+        }
+
+    /* ================= TABLE ================= */
+    .expense-page .recent-expense {
+        background-color: var(--card-bg);
+        border-radius: 10px;
+        overflow-x: auto;
+        margin-bottom: 36px;
+    }
+
+    .expense-page .recent-header {
+        padding: 20px 28px;
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .expense-page .add-btn {
+        background-color: var(--btn-primary-bg);
         color: #fff;
-        font-size: 24px;
-        margin-top: 10px;
-    }
-
-/* Recent Expense Table */
-.expense-page .recent-expense {
-    background-color: #1f1f1f;
-    border-radius: 10px;
-    overflow-x: auto;
-    margin-bottom: 36px;
-}
-
-.expense-page .recent-header {
-    padding: 20px 28px;
-    border-bottom: 1px solid #333;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.expense-page .add-btn {
-    background-color: #dc2626; /* red button */
-    color: #fff;
-    padding: 10px 18px;
-    border-radius: 6px;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-    .expense-page .add-btn:hover {
-        background-color: #b91c1c;
-    }
-
-/* Table */
-.expense-page table {
-    width: 100%;
-    min-width: 1200px;
-    border-collapse: collapse;
-    table-layout: fixed;
-}
-
-.expense-page th,
-.expense-page td {
-    padding: 14px 16px;
-    font-size: 16px;
-    border-bottom: 1px solid #333;
-    white-space: nowrap;
-}
-
-.expense-page th {
-    text-align: left;
-    color: #aaa;
-    text-transform: uppercase;
-    font-size: 14px;
-}
-
-.expense-page td.amount {
-    color: #ef4444; /* red for expenses */
-    font-weight: bold;
-}
-
-/* Buttons */
-.update-btn, .delete-btn {
-    border-radius: 8px;
-    padding: 6px 10px;
-    margin-right: 10px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    border: 1px solid #ccc;
-    background-color: #fff;
-}
-
-    .update-btn:hover {
-        background-color: #dbeafe;
-        border-color: #2563eb;
-        color: #2563eb;
-    }
-
-    .delete-btn:hover {
-        background-color: #fee2e2;
-        border-color: #dc2626;
-        color: #dc2626;
-    }
-
-    .update-btn .icon,
-    .delete-btn .icon {
-        width: 18px;
-        height: 18px;
-        stroke: currentColor;
-    }
-
-/* Footer */
-.expense-page .footer {
-    background-color: #111;
-    border-top: 1px solid #333;
-    padding: 20px;
-    text-align: center;
-    color: #aaa;
-    font-size: 15px;
-}
-
-/* Modal Overlay */
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0,0,0,0.6);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-}
-
-/* Modal Box */
-.modal {
-    background: #1f1f1f;
-    padding: 24px;
-    border-radius: 10px;
-    width: 400px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.6);
-    color: #fff;
-}
-
-    .modal h2 {
-        margin-bottom: 20px;
-        font-size: 22px;
-        color: #ef4444; /* red title */
-    }
-
-    .modal label {
-        display: block;
-        margin-bottom: 6px;
-        font-size: 14px;
-        color: #ccc;
-    }
-
-    .modal input,
-    .modal select {
-        width: 100%;
-        padding: 10px;
-        margin-bottom: 16px;
+        padding: 10px 18px;
         border-radius: 6px;
-        border: 1px solid #444;
-        background: #111;
-        color: #fff;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+        .expense-page .add-btn:hover {
+            background-color: var(--btn-primary-bg-hover);
+        }
+
+    .expense-page table {
+        width: 100%;
+        min-width: 1200px;
+        border-collapse: collapse;
+        table-layout: fixed;
+    }
+
+    .expense-page th,
+    .expense-page td {
+        padding: 14px 16px;
+        font-size: 16px;
+        border-bottom: 1px solid var(--border-color);
+        white-space: nowrap;
+    }
+
+    .expense-page th {
+        text-align: left;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        font-size: 14px;
+    }
+
+    .expense-page td.amount {
+        color: var(--heading-red);
+        font-weight: bold;
+    }
+
+    /* Buttons */
+    .expense-page .update-btn, .expense-page .delete-btn {
+        border-radius: 8px;
+        padding: 6px 10px;
+        margin-right: 10px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 1px solid #ccc;
+        background-color: #fff;
+    }
+
+        .expense-page .update-btn:hover {
+            background-color: #dbeafe;
+            border-color: #2563eb;
+            color: #2563eb;
+        }
+
+        .expense-page .delete-btn:hover {
+            background-color: #fee2e2;
+            border-color: var(--heading-red);
+            color: var(--heading-red);
+        }
+
+    /* ================= FOOTER ================= */
+    .expense-page .footer {
+        background-color: var(--footer-bg);
+        border-top: 1px solid var(--border-color);
+        padding: 20px;
+        text-align: center;
+        color: var(--text-secondary);
         font-size: 15px;
     }
 
-        .modal input:focus,
-        .modal select:focus {
-            outline: none;
-            border-color: #ef4444;
+    /* ================= MODAL ================= */
+    .expense-page .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0,0,0,0.6);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+
+    .expense-page .modal {
+        background: var(--card-bg);
+        padding: 24px;
+        border-radius: 10px;
+        width: 400px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+        color: var(--text-primary);
+    }
+
+        .expense-page .modal h2 {
+            margin-bottom: 20px;
+            font-size: 22px;
+            color: var(--heading-red);
         }
 
-/* Modal Actions */
-.modal-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 12px;
-}
+        .expense-page .modal label {
+            margin-bottom: 6px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
 
-.save-btn {
-    background: #dc2626;
-    color: #fff;
-    border: none;
-    padding: 10px 16px;
-    border-radius: 6px;
-    cursor: pointer;
-}
+        .expense-page .modal input,
+        .expense-page .modal select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 16px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background: var(--input-bg);
+            color: var(--text-primary);
+            font-size: 15px;
+        }
 
-    .save-btn:hover {
-        background: #b91c1c;
+    .expense-page .modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
     }
 
-.cancel-btn {
-    background: #444;
-    color: #fff;
-    border: none;
-    padding: 10px 16px;
-    border-radius: 6px;
-    cursor: pointer;
-}
-
-    .cancel-btn:hover {
-        background: #666;
+    .expense-page .save-btn {
+        background: var(--btn-primary-bg);
+        color: #fff;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 6px;
+        cursor: pointer;
     }
 
+        .expense-page .save-btn:hover {
+            background: var(--btn-primary-bg-hover);
+        }
+
+    .expense-page .cancel-btn {
+        background: var(--btn-secondary-bg);
+        color: #fff;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+
+        .expense-page .cancel-btn:hover {
+            background: var(--btn-secondary-hover);
+        }

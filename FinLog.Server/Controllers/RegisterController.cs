@@ -1,4 +1,5 @@
-﻿using FinLog.Server.Data;
+﻿
+using FinLog.Server.Data;
 using FinLog.Server.Models;
 using FinLog.Server.Services;
 using Microsoft.AspNetCore.Identity;

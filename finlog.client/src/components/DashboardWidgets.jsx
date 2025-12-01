@@ -1,10 +1,11 @@
 import React from "react";
 import "../styles/DashboardWidgets.css";
 
-const DashboardWidgets = ({ income, expense, categories }) => {
-    const balance = income - expense;
+const DashboardWidgets = ({ income, expense, categories, accountBalance }) => {
 
-    // FIXED — uses Unicode Rupee Symbol
+    const balance = accountBalance || (income - expense);
+
+    // Currency formatter
     const formatCurrency = (amount) => {
         return `\u20B9${amount.toLocaleString("en-IN")}`;
     };

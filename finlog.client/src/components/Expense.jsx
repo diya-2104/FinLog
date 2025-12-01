@@ -7,7 +7,7 @@ const Expense = () => {
     const [avatarLetter, setAvatarLetter] = useState("");
     const navigate = useNavigate();
     const [showModal, setShowModal] = useState(false);
-    const [editMode, setEditMode] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
     const [editId, setEditId] = useState(null);
     const [categories, setCategories] = useState([]);
     const [loadingCategories, setLoadingCategories] = useState(true);
@@ -18,28 +18,23 @@ const Expense = () => {
     const [userId, setUserId] = useState(null);
     const [formData, setFormData] = useState({ edate: "", cid: "", account_id: "", eamount: "" });
 
-    // Totals
     const [totalExpenses, setTotalExpenses] = useState(0);
     const [monthlyBills, setMonthlyBills] = useState(0);
-
-    // Last expense (for new card)
     const [lastExpense, setLastExpense] = useState(null);
+    const [isLightMode, setIsLightMode] = useState(false);
 
-    // On mount
     useEffect(() => {
         const userData = localStorage.getItem("user");
         if (!userData) return;
         const user = JSON.parse(userData);
         setUserId(user.uid);
         setAvatarLetter(user.fname ? user.fname[0].toUpperCase() : user.email[0].toUpperCase());
-
         if (user.uid) {
             fetchCategories(user.uid);
             fetchAccounts(user.uid);
         }
     }, []);
 
-    // Fetch expenses after categories and accounts are loaded
     useEffect(() => {
         if (!loadingCategories && !loadingAccounts && userId) {
             fetchExpenses(userId);
@@ -83,10 +78,7 @@ const Expense = () => {
             }));
             setExpenses(formatted);
             updateTotals(formatted);
-
-            // Set last expense for card
             setLastExpense(formatted[0] || null);
-
         } catch (err) {
             console.error("Error fetching expenses:", err);
         } finally {
@@ -103,8 +95,8 @@ const Expense = () => {
         }
     };
 
-    const updateTotals = (expenseList) => {
-        const total = expenseList.reduce((sum, e) => sum + (parseFloat(e.eamount) || 0), 0);
+    const updateTotals = (list) => {
+        const total = list.reduce((sum, e) => sum + (parseFloat(e.eamount) || 0), 0);
         setTotalExpenses(total);
     };
 
@@ -115,66 +107,34 @@ const Expense = () => {
     const handleSave = async () => {
         const { edate, cid, account_id, eamount } = formData;
         if (!userId) return alert("User not found.");
-        if (!edate || !cid || !account_id || !eamount) return alert("Please fill all required fields.");
-
-        const cidNum = parseInt(cid);
-        const accountNum = parseInt(account_id);
-        const amountNum = parseFloat(eamount);
-
-        if (isNaN(cidNum) || isNaN(accountNum) || isNaN(amountNum) || amountNum <= 0) {
-            return alert("Please enter valid numbers for Amount, Category, and Account.");
-        }
-
-        const accountObj = accounts.find(a => a.account_id === accountNum);
-        if (!accountObj) return alert("Selected account does not exist.");
-        if (!editMode && amountNum > accountObj.balance) {
-            return alert(`Insufficient balance. Current balance: ${accountObj.balance.toFixed(2)}`);
-        }
+        if (!edate || !cid || !account_id || !eamount) return alert("Fill all fields.");
 
         const payload = {
             edate: new Date(edate).toISOString(),
-            eamount: amountNum,
-            cid: cidNum,
-            account_id: accountNum,
+            eamount: parseFloat(eamount),
+            cid: parseInt(cid),
+            account_id: parseInt(account_id),
             uid: userId
         };
 
         try {
-            if (editMode && editId) {
-                // ? FIXED: Add eid to payload
+            if (isEditing && editId) {
                 const res = await api.put(`/api/expense/${editId}`, { ...payload, eid: editId });
-
-                const updatedList = expenses.map(e =>
-                    e.eid === editId
-                        ? {
-                            ...e,
-                            ...res.data,
-                            eamount: amountNum,
-                            cname: categories.find(c => c.cid === cidNum)?.cname || "-",
-                            account_name: accounts.find(a => a.account_id === accountNum)?.account_name || "-"
-                        }
-                        : e
-                );
-
-                setExpenses(updatedList);
-                updateTotals(updatedList);
-
-                if (updatedList[0].eid === editId) setLastExpense(updatedList[0]);
+                const updated = expenses.map(e => e.eid === editId ? { ...e, ...res.data, eamount: payload.eamount } : e);
+                setExpenses(updated);
+                updateTotals(updated); 
+                setLastExpense(updated[0] || null);
+                alert("Expense updated successfully!");
             } else {
                 const res = await api.post("/api/expense", payload);
-                const categoryObj = categories.find(c => c.cid === cidNum);
-                const newExpense = {
-                    ...res.data,
-                    eamount: amountNum,
-                    cname: categoryObj?.cname || "-",
-                    account_name: accountObj?.account_name || "-"
-                };
-                const updatedList = [newExpense, ...expenses];
-                setExpenses(updatedList);
-                updateTotals(updatedList);
-                setLastExpense(newExpense);
-            }
+                const newExpense = { ...res.data, eamount: payload.eamount, cname: categories.find(c => c.cid === payload.cid)?.cname || "-", account_name: accounts.find(a => a.account_id === payload.account_id)?.account_name || "-" };
+                const updated = [newExpense, ...expenses];
+                setExpenses(updated);
+                updateTotals(updated);
 
+                setLastExpense(newExpense);
+                alert("Expense added successfully!");
+            }
             fetchMonthlyBills(userId);
             closeModal();
         } catch (err) {
@@ -184,7 +144,7 @@ const Expense = () => {
     };
 
     const handleEdit = (expense) => {
-        setEditMode(true);
+        setIsEditing(true);
         setEditId(expense.eid);
         setFormData({
             edate: new Date(expense.edate).toISOString().split("T")[0],
@@ -196,16 +156,15 @@ const Expense = () => {
     };
 
     const handleDelete = async (eid) => {
-        if (!window.confirm("Are you sure you want to delete this expense?")) return;
+        if (!window.confirm("Delete this expense?")) return;
         try {
             await api.delete(`/api/expense/${eid}`);
             const updated = expenses.filter(e => e.eid !== eid);
             setExpenses(updated);
             updateTotals(updated);
-            fetchMonthlyBills(userId);
-
-            // Update last expense card
             setLastExpense(updated[0] || null);
+            fetchMonthlyBills(userId);
+            alert("Expense deleted successfully!"); 
         } catch (err) {
             console.error("Error deleting expense:", err);
         }
@@ -213,48 +172,49 @@ const Expense = () => {
 
     const closeModal = () => {
         setShowModal(false);
-        setEditMode(false);
+        setIsEditing(false);
         setEditId(null);
         setFormData({ edate: "", cid: "", account_id: "", eamount: "" });
+    };
+
+    const toggleTheme = () => {
+        const page = document.querySelector(".expense-page");
+        page.classList.toggle("light-mode");
+        setIsLightMode(prev => !prev);
     };
 
     return (
         <div className="expense-page">
             <div className="inner-container">
-                {/* Header */}
                 <header className="header">
-                    <div className="logo">
-                        <i className="fas fa-chart-line"></i>
-                        <span>FinTrack</span>
-                    </div>
+                    <div className="logo"><i className="fas fa-chart-line"></i> <span>FinLog</span></div>
                     <div className="header-actions">
-                        <button className="icon-btn" title="Notifications">
-                            <svg
-                                className="notification-icon"
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                            >
-                                <path d="M12 22c1.1 0 2-.9 2-2H10c0 1.1.9 2 2 2z"></path>
-                                <path d="M18 16v-5c0-3.31-2.69-6-6-6s-6 2.69-6 6v5l-2 2v1h16v-1l-2-2z"></path>
-                            </svg>
+                        <button className="theme-toggle-btn" onClick={toggleTheme}>
+                            {isLightMode ? (
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#facc15" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="5" />
+                                    <line x1="12" y1="1" x2="12" y2="3" />
+                                    <line x1="12" y1="21" x2="12" y2="23" />
+                                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                                    <line x1="1" y1="12" x2="3" y2="12" />
+                                    <line x1="21" y1="12" x2="23" y2="12" />
+                                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+                                </svg>
+                            ) : (
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="#fef3c7" stroke="#fef3c7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+                                    <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z" />
+                                </svg>
+                            )}
                         </button>
-                        <div
-                            className="avatar"
-                            title="View Profile"
-                            onClick={() => navigate("/profile")}
-                            style={{ cursor: "pointer" }}
-                        >
+
+                        <div className="avatar" title="View Profile" onClick={() => navigate("/profile")}>
                             {avatarLetter}
                         </div>
                     </div>
                 </header>
 
-                {/* Tabs */}
                 <nav className="tabs">
                     <NavLink to="/income" className={({ isActive }) => isActive ? "tab active-tab" : "tab"}>Income</NavLink>
                     <NavLink to="/expense" className={({ isActive }) => isActive ? "tab active-tab" : "tab"}>Expense</NavLink>
@@ -264,8 +224,6 @@ const Expense = () => {
                     <NavLink to="/report" className={({ isActive }) => isActive ? "tab active-tab" : "tab"}>Reports</NavLink>
                 </nav>
 
-
-                {/* Cards */}
                 <div className="cards">
                     <div className="finance-card">
                         <p>Total Expenses</p>
@@ -284,11 +242,10 @@ const Expense = () => {
                     </div>
                 </div>
 
-                {/* Expenses Table */}
                 <div className="recent-expense">
                     <div className="recent-header">
                         <h2>Recent Expenses</h2>
-                        <button className="add-btn" onClick={() => { setEditMode(false); setShowModal(true); }}>+ Add Expense</button>
+                        <button className="add-btn" onClick={() => { setIsEditing(false); setShowModal(true); }}>+ Add Expense</button>
                     </div>
                     <table>
                         <thead>
@@ -308,7 +265,15 @@ const Expense = () => {
                             ) : (
                                 expenses.map(expense => (
                                     <tr key={expense.eid}>
-                                        <td>{new Date(expense.edate).toLocaleDateString()}</td>
+                                        <td>
+                                            {(() => {
+                                                const d = new Date(expense.edate);
+                                                const day = String(d.getDate()).padStart(2, '0');
+                                                const month = String(d.getMonth() + 1).padStart(2, '0');
+                                                const year = d.getFullYear();
+                                                return `${day}/${month}/${year}`;
+                                            })()}
+                                        </td>
                                         <td>{expense.cname}</td>
                                         <td>{expense.account_name}</td>
                                         <td>{expense.eamount.toFixed(2)}</td>
@@ -327,7 +292,7 @@ const Expense = () => {
             {showModal && (
                 <div className="modal-overlay" onClick={closeModal}>
                     <div className="modal" onClick={e => e.stopPropagation()}>
-                        <h2>{editMode ? "Update Expense" : "Add Expense"}</h2>
+                        <h2>{isEditing ? "Update Expense" : "Add Expense"}</h2>
 
                         <label>Amount</label>
                         <input type="number" name="eamount" value={formData.eamount} onChange={handleInputChange} />
@@ -356,7 +321,11 @@ const Expense = () => {
                         <input type="date" name="edate" value={formData.edate} onChange={handleInputChange} />
 
                         <div className="modal-actions">
-                            <button onClick={handleSave}>{editMode ? "Update" : "Save"}</button>
+                            {isEditing ? (
+                                <button onClick={handleSave}>Update</button>
+                            ) : (
+                                <button onClick={handleSave}>Save</button>
+                            )}
                             <button onClick={closeModal}>Cancel</button>
                         </div>
                     </div>

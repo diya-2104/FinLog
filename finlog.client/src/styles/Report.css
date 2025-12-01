@@ -1,8 +1,28 @@
-/* ===== Main Page ===== */
+/* ======================================================
+   REPORT PAGE – THEME VARIABLES (SCOPED)
+   Same styling system as Income Page
+====================================================== */
+
+/* ?? Default Dark Mode */
 .report-page {
+    --page-bg: #000;
+    --container-bg: #111;
+    --card-bg: #1f1f1f;
+    --input-bg: #111;
+    --table-bg: #1f1f1f;
+    --footer-bg: #111;
+    --text-primary: #fff;
+    --text-secondary: #aaa;
+    --heading-blue: #60A5FA;
+    --border-color: #333;
+    --btn-primary-bg: #2563eb;
+    --btn-primary-bg-hover: #1e4db7;
+    --btn-secondary-bg: #444;
+    --btn-secondary-hover: #666;
+    --success: #22c55e;
+    background-color: var(--page-bg);
+    color: var(--text-primary);
     font-family: Arial, sans-serif;
-    background-color: #000;
-    color: #fff;
     width: 100vw;
     height: 100vh;
     margin: 0;
@@ -15,15 +35,32 @@
     left: 0;
 }
 
-    /* Keep content centered and wide */
-    .report-page .inner-container {
-        min-width: 1200px;
-        box-sizing: border-box;
+    /* ?? Light Mode */
+    .report-page.light-mode {
+        --page-bg: #f5f7fa;
+        --container-bg: #ffffff;
+        --card-bg: #ffffff;
+        --input-bg: #ffffff;
+        --table-bg: #ffffff;
+        --footer-bg: #f0f0f0;
+        --text-primary: #111;
+        --text-secondary: #555;
+        --heading-blue: #2563eb;
+        --border-color: #e6e6e6;
+        --btn-primary-bg: #2563eb;
+        --btn-primary-bg-hover: #154cbb;
+        --btn-secondary-bg: #ddd;
+        --btn-secondary-hover: #ccc;
+        --success: #15803d;
     }
 
-    /* ===== Header ===== */
+    .report-page .inner-container {
+        min-width: 1200px;
+    }
+
+    /* ================= HEADER ================= */
     .report-page .header {
-        background-color: #111;
+        background-color: var(--container-bg);
         padding: 20px 16px;
         display: flex;
         justify-content: space-between;
@@ -36,45 +73,50 @@
         align-items: center;
         font-weight: 600;
         font-size: 18px;
-        color: #fff;
+        color: var(--text-primary);
     }
 
         .report-page .logo i {
             margin-right: 8px;
-            color: #60A5FA;
+            color: var(--heading-blue);
             font-size: 24px;
         }
 
+/* HEADER ACTIONS */
 .header-actions {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 10px;
 }
 
-.icon-btn {
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 4px;
+/* Theme Toggle Button (Same as Income Page) */
+.theme-toggle-btn {
     display: flex;
     align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--btn-secondary-bg);
+    cursor: pointer;
+    border: none;
+    transition: background 0.3s ease;
+    padding: 4px;
 }
 
-.notification-icon {
-    width: 28px;
-    height: 25px;
-    stroke: #fff;
-    transition: transform 0.3s ease, stroke 0.3s ease;
-}
-
-    .notification-icon:hover {
-        transform: scale(1.1);
-        stroke: #3b82f6;
+    .theme-toggle-btn:hover {
+        background: var(--btn-secondary-hover);
     }
 
+    .theme-toggle-btn svg {
+        width: 70%;
+        height: 70%;
+    }
+
+/* Avatar */
 .report-page .avatar {
-    width: 30px;
-    height: 30px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     background-color: #2563eb;
     display: flex;
@@ -82,14 +124,16 @@
     justify-content: center;
     font-weight: bold;
     color: #fff;
-    font-size: 14px;
+    font-size: 18px;
+    text-transform: uppercase;
+    cursor: pointer;
 }
 
-/* ===== Tabs ===== */
+/* ================= TABS ================= */
 .report-page .tabs {
     display: flex;
     gap: 28px;
-    border-bottom: 1px solid #333;
+    border-bottom: 1px solid var(--border-color);
     margin-bottom: 28px;
     flex-wrap: wrap;
     padding: 12px 0;
@@ -98,24 +142,23 @@
 .report-page .tab {
     padding: 20px 6px;
     font-size: 16px;
-    color: #aaa;
+    color: var(--text-secondary);
     text-decoration: none;
     border-bottom: 2px solid transparent;
     transition: 0.3s;
 }
 
     .report-page .tab:hover {
-        color: #fff;
+        color: var(--text-primary);
     }
 
 .report-page .active-tab {
-    border-bottom: 3px solid #3b82f6;
-    color: #3b82f6;
+    border-bottom: 3px solid var(--heading-blue);
+    color: var(--heading-blue);
     font-weight: 600;
 }
 
-
-/* ===== Chart Section ===== */
+/* ================= CHART CARDS ================= */
 .charts-wrapper {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -123,9 +166,8 @@
     padding-bottom: 40px;
 }
 
-/* Single Chart Card */
 .chart-card {
-    background: #111;
+    background: var(--card-bg);
     padding: 20px;
     border-radius: 12px;
     box-shadow: 0px 0px 6px rgba(255,255,255,0.07);
@@ -141,27 +183,27 @@
         margin-bottom: 12px;
         font-size: 20px;
         font-weight: 600;
-        color: #fff;
+        color: var(--text-primary);
     }
 
-    /* Ensure canvas takes full width */
     .chart-card canvas {
         width: 100% !important;
         height: 280px !important;
     }
 
-/* ===== Mobile Responsive ===== */
+/* MOBILE */
 @media (max-width: 900px) {
     .charts-wrapper {
         grid-template-columns: 1fr;
     }
 }
 
-.transaction-page .footer {
-    background-color: #111;
-    border-top: 1px solid #333;
+/* ================= FOOTER ================= */
+.report-page .footer {
+    background-color: var(--footer-bg);
+    border-top: 1px solid var(--border-color);
     padding: 20px;
     text-align: center;
-    color: #aaa;
+    color: var(--text-secondary);
     font-size: 15px;
 }
